@@ -23,12 +23,16 @@ $sql_jardin = "SELECT
             INNER JOIN 
                 users ON Jardin.user_id = users.user_id 
             WHERE 
-                Jardin.jardin_id = :id";
+                Jardin.jardin_id = :id AND Jardin.is_public = true";
 
 $query_jardin = $db->prepare($sql_jardin);
 $query_jardin->bindParam(':id', $_GET['id']);
 $query_jardin->execute();
 $jardin = $query_jardin->fetch(PDO::FETCH_ASSOC);
+
+if(!$jardin){
+    header('Location: /');
+}
 
 // Vérifie si l'utilisateur connecté est le propriétaire du jardin
 $owner = false;

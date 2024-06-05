@@ -19,7 +19,7 @@ $users = findAll("users");
 </div>
 
 <h2 class="font-bold text-xl mt-12 mb-8">Liste des jardins</h2>
-<button class="bg-black text-white py-2 px-4 rounded-sm flex justify-center my-2" onclick="displayAddGardenForm()">Créer une parcelle</button>
+<button class="bg-black text-white py-2 px-4 rounded-sm flex justify-center my-2" onclick="displayAddGardenForm()">Créer un jardin</button>
 <div class="flex flex-wrap gap-2" id="listing">
     <?php
         foreach($jardins as $jardin){ ?>
@@ -49,7 +49,7 @@ $users = findAll("users");
 ?>
 <div id="addGardenForm" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
     <form action="#" method="POST" enctype="multipart/form-data" class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative">
-    <button type="button" onclick="closeEditGardenForm()" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+    <button type="button" onclick="closeAddGardenForm()" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
             </button>
@@ -170,40 +170,9 @@ $users = findAll("users");
 
 
 <script>
-    async function deleteGarden(id){
-        try {
-            const res = await $.ajax({
-                type: "GET",
-                url: "../../api/garden/delete",
-                data: {
-                    id
-                },
-                dataType: "JSON",
-                success: function (response) {
-                    fetchGardens();
-                }
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
 
-    async function fetchGardens(){
-        try {
-            const res = await $.ajax({
-                type: "GET",
-                url: "../api/garden/index.php",
-                dataType: "JSON",
-                success: function (response) {
-                    displayGarden(response);
-                }
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
+    // Début du CRUD des jardins
     async function createGarden(event){
         event.preventDefault();
         let name = document.getElementById("jardin_nom");
@@ -238,6 +207,82 @@ $users = findAll("users");
             
         }
     }
+
+    async function fetchGardens(){
+        try {
+            const res = await $.ajax({
+                type: "GET",
+                url: "../api/garden/index.php",
+                dataType: "JSON",
+                success: function (response) {
+                    displayGarden(response);
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function updateGarden(event) {
+    event.preventDefault();
+
+    let jardinId = document.getElementById("editGardenForm").dataset.jardinId;
+    let name = document.getElementById("edit_jardin_nom").value;
+    let position = document.getElementById("edit_jardin_position").value;
+    let image = document.getElementById("edit_jardin_image").files[0];
+    let user_id = document.getElementById("edit_users").value;
+    let is_public = document.querySelector('input[name="visibilityEdit"]:checked').value;
+
+    let formData = new FormData();
+    formData.append("jardin_id", jardinId);
+    formData.append("jardin_nom", name);
+    formData.append("jardin_position", position);
+    if (image) {
+        formData.append("jardin_image", image);
+    }
+    formData.append("user_id", user_id);
+    formData.append("is_public", is_public);
+
+    try {
+        const res = await $.ajax({
+            type: "POST",
+            url: "../api/garden/update/admin.php",
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: "JSON",
+            success: function (response) {
+                fetchGardens();
+                closeEditGardenForm();
+            }
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+    async function deleteGarden(id){
+        try {
+            const res = await $.ajax({
+                type: "GET",
+                url: "../api/garden/delete/index.php",
+                data: {
+                    id
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    fetchGardens();
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // FIN du CRUD des jardins
+
+
+
     function displayGarden(data){
         const wrapper = $("#listing");
         wrapper.empty();
@@ -307,61 +352,7 @@ $users = findAll("users");
         form.classList.add("hidden");
     }
 
-    async function deleteGarden(id){
-        try {
-            const res = await $.ajax({
-                type: "GET",
-                url: "../api/garden/delete/index.php",
-                data: {
-                    id
-                },
-                dataType: "JSON",
-                success: function (response) {
-                    fetchGardens();
-                }
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
-    async function updateGarden(event) {
-    event.preventDefault();
-
-    let jardinId = document.getElementById("editGardenForm").dataset.jardinId;
-    let name = document.getElementById("edit_jardin_nom").value;
-    let position = document.getElementById("edit_jardin_position").value;
-    let image = document.getElementById("edit_jardin_image").files[0];
-    let user_id = document.getElementById("edit_users").value;
-    let is_public = document.querySelector('input[name="visibilityEdit"]:checked').value;
-
-    let formData = new FormData();
-    formData.append("jardin_id", jardinId);
-    formData.append("jardin_nom", name);
-    formData.append("jardin_position", position);
-    if (image) {
-        formData.append("jardin_image", image);
-    }
-    formData.append("user_id", user_id);
-    formData.append("is_public", is_public);
-
-    try {
-        const res = await $.ajax({
-            type: "POST",
-            url: "../api/garden/update/admin.php",
-            data: formData,
-            processData: false,
-            contentType: false,
-            dataType: "JSON",
-            success: function (response) {
-                fetchGardens();
-                closeEditGardenForm();
-            }
-        });
-    } catch (error) {
-        console.error(error);
-    }
-}
 
 
 document.getElementById("editGardenForm").addEventListener("submit", (event) => {
