@@ -85,7 +85,7 @@ $users = findAll("users");
             </div>
             <a href="../../garden/single.php?id=<?= $parcelle['jardin_id'] ?>" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Voir plus</a>
             <a href="../process/plot/delete.proc.php?id=<?= $parcelle['parcelle_id'] ?>" class="bg-red-800 text-white py-2 px-4 rounded-sm flex justify-center mt-4">Supprimer</a>
-
+            <button class="border text-black w-full py-2 px-4 rounded-sm flex justify-center mt-2">Modifier</button>
         </div>
         <?php
     }
