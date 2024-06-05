@@ -19,6 +19,7 @@ $sql = "SELECT
                 parcelle.user_id,
                 parcelle.parcelle_type,
                 parcelle.isAccepted,
+                parcelle.parcelle_nom,
                 users.user_nom,
                 Jardin.jardin_nom,
                 Jardin.jardin_position,
@@ -85,7 +86,7 @@ $users = findAll("users");
             </div>
             <a href="../../garden/single.php?id=<?= $parcelle['jardin_id'] ?>" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Voir plus</a>
             <a href="../process/plot/delete.proc.php?id=<?= $parcelle['parcelle_id'] ?>" class="bg-red-800 text-white py-2 px-4 rounded-sm flex justify-center mt-4">Supprimer</a>
-            <button class="border text-black w-full py-2 px-4 rounded-sm flex justify-center mt-2">Modifier</button>
+            <button class="border text-black w-full py-2 px-4 rounded-sm flex justify-center mt-2" onclick='displayEditForm(<?= json_encode($parcelle) ?>)'>Modifier</button>
         </div>
         <?php
     }
@@ -101,7 +102,7 @@ $users = findAll("users");
 <div id="plotForm" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
         <form class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative" id="typePlotForm" action="#" method="POST">
             <p class="font-bold text-xl">Créer une parcelle</p>
-            <button onclick="closeForm(event)" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <button type="button" onclick="closeForm(event)" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
             </button>
@@ -138,11 +139,63 @@ $users = findAll("users");
             <div>
                 
             </div>
-            <button type="submit" class="bg-lime-800 text-white py-2 px-4 rounded-sm mt-4">Définir la plantation</button>
+            <button type="submit" class="bg-lime-800 text-white py-2 px-4 rounded-sm mt-4">Créer la parcelle</button>
         </form>
 </div>
 <?php
 // Fin Formulaire d'ajout de parcelle
+?>
+
+
+
+<?php
+// Formulaire d'édition de parcelle
+?>
+<div id="editPlotForm" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
+        <form class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative" id="editForm" action="#" method="POST">
+            <p class="font-bold text-xl">Modifier une parcelle</p>
+            <button type="button" onclick="closeEditForm(event)" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div class="flex flex-col mt-2">
+                <label for="edit_parcelle_nom" class="font-bold">Entrer le nom</label>
+                <input type="text" name="edit_parcelle_nom" id="edit_parcelle_nom" class="border pl-4 py-2" placeholder="Nom de la parcelle">
+            </div>
+            <div class="flex flex-col mt-2">
+                <label for="edit_jardin" class="font-bold">Sélectionner le jardin</label>
+                <select name="edit_jardin" id="edit_jardin" class="border pl-4 py-2">
+                    <?php
+                    foreach ($jardins as $jardin) { ?>
+                        <option value="<?= $jardin['jardin_id'] ?>"><?= $jardin['jardin_nom'] ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="flex flex-col mt-2">
+                <label for="edit_users" class="font-bold">Sélectionner un utilisateur</label>
+                <select name="edit_users" id="edit_users" class="border pl-4 py-2">
+                    <?php
+                    foreach ($users as $user) { ?>
+                        <option value="<?= $user['user_id'] ?>"><?= $user['user_nom'] ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="flex flex-col mt-2">
+                <label for="edit_parcelle_type" class="font-bold">Entrer le type</label>
+                <input type="text" name="edit_plantation_type" id="edit_parcelle_type" class="border pl-4 py-2" placeholder="Nom de la plantation">
+            </div>
+            <div>
+                
+            </div>
+            <button type="submit" class="bg-lime-800 text-white py-2 px-4 rounded-sm mt-4">Définir la plantation</button>
+        </form>
+</div>
+<?php
+// Fin Formulaire d'édition de parcelle
 ?>
 
 
@@ -190,6 +243,49 @@ $users = findAll("users");
             
         }
     }
+
+    function displayEditForm(parcelle) {
+        const form = document.getElementById("editPlotForm");
+        form.classList.remove("hidden");
+        console.log(parcelle);
+        // Pré-remplir les champs du formulaire
+        document.getElementById("edit_parcelle_nom").value = parcelle.parcelle_nom || '';
+        document.getElementById("edit_jardin").value = parcelle.jardin_id || '';
+        setSelectOption('edit_users', parcelle.user_id);
+        document.getElementById("edit_parcelle_type").value = parcelle.parcelle_type || '';
+
+        // Vous pouvez également stocker l'ID de la parcelle à modifier si besoin
+        form.dataset.parcelleId = parcelle.parcelle_id;
+    }
+
+    function setSelectOption(selectId, value) {
+        const selectElement = document.getElementById(selectId);
+        for (let i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value == value) {
+                selectElement.selectedIndex = i;
+                break;
+            }
+        }
+    }
+
+    function closeEditForm(event)
+    {
+        const form = document.getElementById("editPlotForm");
+        form.classList.add("hidden");
+    }
+
+    async function editPlot(event)
+    {
+        event.preventDefault();
+        let name = document.getElementById("edit_parcelle_nom");
+        let jardin = (document.getElementById("edit_jardin"));
+        let user = (document.getElementById("edit_users"));
+        let type = (document.getElementById("edit_parcelle_type"));
+    }
+
+
+
+    // Récupérer les parcelles et les afficher dynamiquement
 
     async function fetchPlot()
     {
@@ -256,6 +352,7 @@ $users = findAll("users");
                 </div>
                 <a href="../../garden/single.php?id=${element['jardin_id']}" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Voir plus</a>
                 <a href="../process/plot/delete.proc.php?id=${element['parcelle_id']}" class="bg-red-800 text-white py-2 px-4 rounded-sm flex justify-center mt-4">Supprimer</a>
+                <button class="border text-black w-full py-2 px-4 rounded-sm flex justify-center mt-2" onclick="displayEditForm(${element})">Modifier</button>
             </div>
         `;
 

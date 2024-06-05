@@ -69,6 +69,7 @@ $jardins = sql($sql);
         <div class="flex flex-col">
             <label for="positon">Entrer la position du jardin</label>
             <input type="text" name="position" id="position" class="border pl-4 py-2" placeholder="Position du jardin">
+            <div id="suggestions" class="suggestions"></div>
         </div>
         
         <input type="file" name="image" id="image">
@@ -239,4 +240,9 @@ $jardins = sql($sql);
             wrapper.append(div);
         });
     }
+
+
+    
+
+
 </script>
