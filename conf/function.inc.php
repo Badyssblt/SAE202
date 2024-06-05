@@ -170,9 +170,5 @@ function addGarden($data, $file)
     }
 }
 
-function editGarden($data)
-{
-    extract($data);
-}
 
 

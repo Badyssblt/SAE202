@@ -247,14 +247,12 @@ $users = findAll("users");
     function displayEditForm(parcelle) {
         const form = document.getElementById("editPlotForm");
         form.classList.remove("hidden");
-        console.log(parcelle);
-        // Pré-remplir les champs du formulaire
+
         document.getElementById("edit_parcelle_nom").value = parcelle.parcelle_nom || '';
         document.getElementById("edit_jardin").value = parcelle.jardin_id || '';
         setSelectOption('edit_users', parcelle.user_id);
         document.getElementById("edit_parcelle_type").value = parcelle.parcelle_type || '';
 
-        // Vous pouvez également stocker l'ID de la parcelle à modifier si besoin
         form.dataset.parcelleId = parcelle.parcelle_id;
     }
 

@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-require("../../../conf/function.inc.php");
+require("../../../../conf/function.inc.php");
 
 extract($_GET);
 
