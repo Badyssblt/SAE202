@@ -7,25 +7,32 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST") {
     exit; 
 }
 
-require('../../../conf/function.inc.php');
+require('../../../../conf/function.inc.php');
 
-if(!isset($_SESSION)){
-    session_start();
-}
+$status = $_POST['status'];
 
 
 $sql = "UPDATE parcelle SET jardin_id = :jardin_id, user_id = :userID, parcelle_type = :type, isAccepted = :isAccepted, parcelle_nom = :nom WHERE parcelle_id = :id";
 $db = getConnection();
 $query = $db->prepare($sql);
-$query->bindParam(':jardin_id', $_POST['jardinID']);
-$query->bindParam(':userID', $_POST['userID']);
+
+$query->bindParam(':jardin_id', $_POST['jardin']);
+$query->bindParam(':userID', $_POST['user']);
 $query->bindParam(':type', $_POST['type']);
-$query->bindParam(':isAccepted', $_POST['isAccepted']);
-$query->bindParam(':nom', $_POST['nom']);
+$query->bindParam(':nom', $_POST['name']);
+$query->bindParam(':id', $_POST['id']); 
+
+if ($status == "waiting") {
+    $query->bindValue(':isAccepted', 0);
+} else if ($status == "accepted") {
+    $query->bindValue(':isAccepted', 1);
+} else {
+    $query->bindValue(':isAccepted', 0);
+    $query->bindValue(':userID', null);
+}
+
 
 $res = $query->execute();
 
-
 header('Content-Type: application/json');
-
 echo json_encode($res);

@@ -5,14 +5,7 @@
 require("../../conf/header.inc.php");
 require('../../conf/function.inc.php');
 
-if(!isset($_SESSION)){
-    session_start();
-}
 
-if(!isset($_SESSION['id'])){
-    header('Location: ./signin.php');
-}
-$userID = $_SESSION['id'];
 $sql = "SELECT 
                 parcelle.parcelle_id,
                 parcelle.jardin_id,
@@ -64,15 +57,15 @@ $users = findAll("users");
         ?>
         <div class="border p-4 rounded-sm w-48">
             <h2><?= $parcelle['jardin_nom'] ?></h2>
-            <p>Type: <?= $parcelle['parcelle_type'] ?></p>
+            <p>Type: <span class="font-bold"><?= $parcelle['parcelle_type'] ?></span></p>
             <div class="mt-4">
                 <h3 class="font-bold">Status</h3>
                 <?php
                     if($isWaiting && $isAvailable){ ?>
                     <p>Demande en cours</p>
                     <div class="flex flex-row mt-2 gap-2">
-                        <a  class="bg-lime-800 text-white py-2 px-4 rounded-sm">Accepter</a>
-                        <a href="../process/plot/denied.proc.php?id=<?= $parcelle['parcelle_id'] ?>" class="bg-red-800 text-white py-2 px-4 rounded-sm">Refuser</a>
+                        <a  class="bg-lime-800 text-white py-2 px-4 rounded-sm" onclick="acceptRequest('accepted', <?= $parcelle['parcelle_id'] ?>)">Accepter</a>
+                        <a href="../process/plot/denied.proc.php?id=<?= $parcelle['parcelle_id'] ?>" class="bg-red-800 text-white py-2 px-4 rounded-sm" onclick="acceptRequest('denied', <?= $parcelle['parcelle_id'] ?>)">Refuser</a>
                     </div>
 <?php
                     }else if(!$isWaiting && $isAvailable){ ?>
@@ -189,6 +182,15 @@ $users = findAll("users");
                 <input type="text" name="edit_plantation_type" id="edit_parcelle_type" class="border pl-4 py-2" placeholder="Nom de la plantation">
             </div>
             <div>
+            <div class="flex flex-col mt-2">
+                <label for="edit_parcelle_type" class="font-bold">Status</label>
+                <select name="edit_users" id="edit_status" class="border pl-4 py-2">
+                    <option value="waiting">En attente</option>
+                    <option value="accepted">Accepter</option>
+                    <option value="denied">Refuser</option>
+                </select>
+            </div>
+            <div>
                 
             </div>
             <button type="submit" class="bg-lime-800 text-white py-2 px-4 rounded-sm mt-4">Définir la plantation</button>
@@ -206,6 +208,11 @@ $users = findAll("users");
             event.preventDefault();
             createPlot(event)
         });
+
+        document.getElementById("editForm").addEventListener("submit", (event) => {
+            editPlot(event);
+        });
+
 
     function displayForm(){
         const form = document.getElementById("plotForm");
@@ -279,6 +286,26 @@ $users = findAll("users");
         let jardin = (document.getElementById("edit_jardin"));
         let user = (document.getElementById("edit_users"));
         let type = (document.getElementById("edit_parcelle_type"));
+        let status = document.getElementById("edit_status");
+        let jardinID = document.getElementById("editPlotForm").dataset.parcelleId;
+
+        $.ajax({
+            type: "POST",
+            url: "../api/plot/update/admin.php",
+            data: {
+                name: name.value,
+                jardin: jardin.value,
+                user: user.value,
+                type: type.value,
+                status: status.value,
+                id: jardinID
+            },
+            dataType: "JSON",
+            success: function (response) {
+                fetchPlot();
+                closeEditForm();
+            }
+        });
     }
 
 
@@ -302,61 +329,73 @@ $users = findAll("users");
         }
     }
 
-    function displayPlot(data)
+
+    async function acceptRequest(status, id)
     {
-        const wrapper = $("#listing");
-        wrapper.empty();
-        data.forEach(element => {
+        try {
+            const res = await $.ajax({
+                type: "POST",
+                url: "../api/plot/update/status.php",
+                data: {
+                    isAccepted: status,
+                    id: id,
+                    status: status
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    fetchPlot();
+                }
+            });
+        } catch (error) {
+            
+        }
+    }
+
+    function displayPlot(data) {
+    const wrapper = $("#listing");
+    wrapper.empty();
+
+    data.forEach(element => {
         let isAvailable = element.isAccepted == 1 ? false : true;
-        let isWaiting = (isAvailable && element.parcelle_user != null) ? true : false;
+        let isWaiting = (isAvailable && element.user_nom != null) ? true : false;
 
         let plotDetails;
 
-        let type;
-
-        let closeButton;
-
-        if(element['parcelle_type'] !== null){
-            type = `<p>Type : <span class="font-bold">${element['parcelle_type']}</span></p>`;
-        }else {
-            type = ``;
-        }
-
         if (isAvailable && !isWaiting) {
+            plotDetails = `<p>Disponible</p>`;
+        } else if (isAvailable && isWaiting) {
             plotDetails = `
-                <p>Disponible</p>
+                <p>Demande en cours</p>
+                <div class="flex flex-row mt-2 gap-2">
+                    <a class="bg-lime-800 text-white py-2 px-4 rounded-sm" onclick="acceptRequest('accepted', ${element.parcelle_id})">Accepter</a>
+                    <a href="../process/plot/denied.proc.php?id=${element.parcelle_id}" class="bg-red-800 text-white py-2 px-4 rounded-sm" onclick="acceptRequest('denied', ${element.parcelle_id})">Refuser</a>
+                </div>
             `;
-        } else if(isAvailable && isWaiting){
-            plotDetails = `
-                    <p>Demande en cours</p>
-                    <div class="flex flex-row mt-2 gap-2">
-                        <a class="bg-lime-800 text-white py-2 px-4 rounded-sm">Accepter</a>
-                        <a href="../process/plot/denied.proc.php?id=${element['parcelle_id']}" class="bg-red-800 text-white py-2 px-4 rounded-sm">Refuser</a>
-                    </div>
-            `;
-        }else if(!isAvailable && !isWaiting){
-            plotDetails = `
-                <p>Détenu par <span class="font-bold"><?= $parcelle['user_nom']?></span></p>
-            `;
+        } else if (!isAvailable && !isWaiting) {
+            plotDetails = `<p>Détenu par <span class="font-bold">${element.user_nom}</span></p>`;
         }
+
+        let type = element.parcelle_type !== null ? `<p>Type: <span class="font-bold">${element.parcelle_type}</span></p>` : '';
 
         const div = `
             <div class="border p-4 rounded-sm w-48">
-                <h2>${element['jardin_nom']}</h2>
-                <p>Type: <?= $parcelle['parcelle_type'] ?></p>
+                <h2>${element.jardin_nom}</h2>
+                ${type}
                 <div class="mt-4">
                     <h3 class="font-bold">Status</h3>
-                ${plotDetails}
+                    ${plotDetails}
                 </div>
-                <a href="../../garden/single.php?id=${element['jardin_id']}" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Voir plus</a>
-                <a href="../process/plot/delete.proc.php?id=${element['parcelle_id']}" class="bg-red-800 text-white py-2 px-4 rounded-sm flex justify-center mt-4">Supprimer</a>
-                <button class="border text-black w-full py-2 px-4 rounded-sm flex justify-center mt-2" onclick="displayEditForm(${element})">Modifier</button>
+                <a href="../../garden/single.php?id=${element.jardin_id}" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Voir plus</a>
+                <a href="../process/plot/delete.proc.php?id=${element.parcelle_id}" class="bg-red-800 text-white py-2 px-4 rounded-sm flex justify-center mt-4">Supprimer</a>
+                <button class="border text-black w-full py-2 px-4 rounded-sm flex justify-center mt-2" onclick='displayEditForm(${JSON.stringify(element)})'>Modifier</button>
             </div>
         `;
 
         wrapper.append(div);
-        })
-    }
+    });
+}
+
+
 
 
 </script>
