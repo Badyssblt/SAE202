@@ -2,16 +2,18 @@
     <menu class="flex flex-row gap-10 ">
         <li><a href="/">Accueil</a></li>
         <li><a href="/garden">Jardins</a></li>
+        <li><a href="/social">Réseau-social</a></li>
         <?php
-            if(isset($_SESSION['id'])){ ?>
+        if (isset($_SESSION['id'])) { ?>
             <li><a href="/user">Mon compte</a></li>
         <?php
-            }else { ?>
+        } else { ?>
             <li><a href="/user/signin.php">Se connecter</a></li>
-            <?php
-            }
+        <?php
+        }
         ?>
         <li><a href="/admin/garden/listGarden.php">Administrateur</a></li>
     </menu>
 </header>
+
 <body>
