@@ -49,14 +49,15 @@ if(isset($_SESSION['id']) && $jardin['jardin_user_id'] == $_SESSION['id']){
 
 $sql_parcelles = "SELECT 
                     parcelle.parcelle_id, 
-                    parcelle.parcelle_type,
                     parcelle.parcelle_nom,
                     users.user_nom AS parcelle_user,
-                    parcelle.isAccepted
+                    parcelle.isAccepted,
+                    plantations.plantation_nom
                 FROM 
                     parcelle 
                 LEFT JOIN 
                     users ON parcelle.user_id = users.user_id
+                LEFT JOIN plantations ON parcelle.plantation_id = plantations.plantation_id
                 WHERE 
                     parcelle.jardin_id = :id";
 
@@ -64,6 +65,7 @@ $query_parcelles = $db->prepare($sql_parcelles);
 $query_parcelles->bindParam(':id', $_GET['id']);
 $query_parcelles->execute();
 $parcelles = $query_parcelles->fetchAll(PDO::FETCH_ASSOC);
+
 
 
 if ($jardin) {
@@ -110,8 +112,8 @@ if ($jardin) {
                             <p class="font-bold"><?= $parcelle['parcelle_nom'] ?></p>                      
                             <button onclick="updatePlot(<?= $parcelle['parcelle_id'] ?>)" class="bg-black text-white py-2 px-4 rounded-sm mt-2 inline-block">Réserver</button>
                             <?php
-                                if($parcelle['parcelle_type'] !== null){ ?>
-                                <p>Type : <span class="font-bold"><?= $parcelle['parcelle_type'] ?></span></p>
+                                if($parcelle['plantation_nom'] !== null){ ?>
+                                <p>Type : <span class="font-bold"><?= $parcelle['plantation_nom'] ?></span></p>
                             <?php
                                 }
                             ?>
@@ -120,16 +122,16 @@ if ($jardin) {
                             <p class="font-bold"><?= $parcelle['parcelle_nom'] ?></p> 
                             <button class="bg-black text-white py-2 px-4 rounded-sm mt-2 inline-block">Réservation en cours</button>
                             <?php
-                                if($parcelle['parcelle_type'] !== null){ ?>
-                                <p>Type : <span class="font-bold"><?= $parcelle['parcelle_type'] ?></span></p>
+                                if($parcelle['plantation_nom'] !== null){ ?>
+                                <p>Type : <span class="font-bold"><?= $parcelle['plantation_nom'] ?></span></p>
                                 <?php
 
                                 }
                             }else { ?>
                             <p>Propriétaire : <span class="font-bold"><?= $parcelle['parcelle_user'] ?></span></p>
                             <?php
-                                if($parcelle['parcelle_type'] !== null){ ?>
-                                <p>Type : <span class="font-bold"><?= $parcelle['parcelle_type'] ?></span></p>
+                                if($parcelle['plantation_nom'] !== null){ ?>
+                                <p>Type : <span class="font-bold"><?= $parcelle['plantation_nom'] ?></span></p>
                                 <?php
                                 }
                             }
@@ -266,8 +268,8 @@ if ($jardin) {
             closeButton = ``;
         }
 
-        if(element['parcelle_type'] !== null){
-            type = `<p>Type : <span class="font-bold">${element['parcelle_type']}</span></p>`;
+        if(element['plantation_nom'] !== null){
+            type = `<p>Type : <span class="font-bold">${element['plantation_nom']}</span></p>`;
         }else {
             type = ``;
         }

@@ -22,7 +22,7 @@ if(isset($_SESSION['id'])){
     die();
 }
 
-$sql = "UPDATE parcelle SET parcelle_type = :type WHERE parcelle_id = :id";
+$sql = "UPDATE parcelle SET plantation_id = :type WHERE parcelle_id = :id";
 $db = getConnection();
 $query = $db->prepare($sql);
 $query->bindParam(':id', $_POST['id']);

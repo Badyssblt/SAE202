@@ -7,28 +7,34 @@ require('../../conf/function.inc.php');
 
 
 $sql = "SELECT 
-                parcelle.parcelle_id,
-                parcelle.jardin_id,
-                parcelle.user_id,
-                parcelle.parcelle_type,
-                parcelle.isAccepted,
-                parcelle.parcelle_nom,
-                users.user_nom,
-                Jardin.jardin_nom,
-                Jardin.jardin_position,
-                Jardin.jardin_image
-            FROM parcelle 
-            INNER JOIN Jardin ON Jardin.jardin_id = parcelle.jardin_id
-            LEFT JOIN users ON parcelle.user_id = users.user_id";
+parcelle.parcelle_id,
+parcelle.jardin_id,
+parcelle.user_id,
+parcelle.isAccepted,
+parcelle.parcelle_nom,
+users.user_nom,
+Jardin.jardin_nom,
+Jardin.jardin_position,
+Jardin.jardin_image,
+plantations.plantation_nom,
+plantations.plantation_id
+FROM parcelle 
+INNER JOIN Jardin ON Jardin.jardin_id = parcelle.jardin_id
+LEFT JOIN users ON parcelle.user_id = users.user_id
+LEFT JOIN plantations ON parcelle.plantation_id = plantations.plantation_id;
+";
 
 $db = getConnection();
 $query = $db->prepare($sql);
 $query->execute();
 $parcelles = $query->fetchAll(PDO::FETCH_ASSOC);
 
+
 $jardins = findAll("Jardin");
 
 $users = findAll("users");
+
+$plantations = findAll("plantations");
 
 ?>
 <div class="px-8">
@@ -38,6 +44,7 @@ $users = findAll("users");
     <a href="../garden/listGarden.php" class="border text-black py-2 px-4 rounded-sm flex justify-center mt-2">Liste des jardins</a>
     <a href="./listPlot.php" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Liste des parcelles</a>
     <a href="../users/listUsers.php" class="border text-black py-2 px-4 rounded-sm flex justify-center mt-2">Liste des utilisateurs</a>
+    <a href="../plantations/listPlantations.php" class="border text-black py-2 px-4 rounded-sm flex justify-center mt-2">Liste des plantations</a>
 </div>
 
 <h2 class="font-bold text-xl mt-12 mb-8">Liste des parcelles</h2>
@@ -57,7 +64,7 @@ $users = findAll("users");
         ?>
         <div class="border p-4 rounded-sm w-48">
             <h2><?= $parcelle['jardin_nom'] ?></h2>
-            <p>Type: <span class="font-bold"><?= $parcelle['parcelle_type'] ?></span></p>
+            <p>Type: <span class="font-bold"><?= $parcelle['plantation_nom'] ?></span></p>
             <div class="mt-4">
                 <h3 class="font-bold">Status</h3>
                 <?php
@@ -126,8 +133,15 @@ $users = findAll("users");
                 </select>
             </div>
             <div class="flex flex-col mt-2">
-                <label for="parcelle_type" class="font-bold">Entrer le type</label>
-                <input type="text" name="plantation_type" id="parcelle_type" class="border pl-4 py-2" placeholder="Nom de la plantation">
+                <label for="users" class="font-bold">Sélectionner un type de plantation</label>
+                <select name="parcelle_type" id="parcelle_type" class="border pl-4 py-2">
+                    <?php
+                    foreach ($plantations as $plantation) { ?>
+                        <option value="<?= $plantation['plantation_id'] ?>"><?= $plantation['plantation_nom'] ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
             </div>
             <div>
                 
@@ -177,9 +191,18 @@ $users = findAll("users");
                     ?>
                 </select>
             </div>
+
             <div class="flex flex-col mt-2">
-                <label for="edit_parcelle_type" class="font-bold">Entrer le type</label>
-                <input type="text" name="edit_plantation_type" id="edit_parcelle_type" class="border pl-4 py-2" placeholder="Nom de la plantation">
+                <label for="edit_parcelle_type" class="font-bold">Sélectionner la plantation</label>
+                <select name="edit_parcelle_type" id="edit_parcelle_type" class="border pl-4 py-2">
+                    <?php
+                    foreach ($plantations as $plantation) { 
+                        ?>
+                        <option value="<?= $plantation['plantation_id'] ?>"><?= $plantation['plantation_nom'] ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
             </div>
             <div>
             <div class="flex flex-col mt-2">
@@ -258,8 +281,7 @@ $users = findAll("users");
         document.getElementById("edit_parcelle_nom").value = parcelle.parcelle_nom || '';
         document.getElementById("edit_jardin").value = parcelle.jardin_id || '';
         setSelectOption('edit_users', parcelle.user_id);
-        document.getElementById("edit_parcelle_type").value = parcelle.parcelle_type || '';
-
+        setSelectOption('edit_parcelle_type', parcelle.plantation_id);
         form.dataset.parcelleId = parcelle.parcelle_id;
     }
 
@@ -375,7 +397,7 @@ $users = findAll("users");
             plotDetails = `<p>Détenu par <span class="font-bold">${element.user_nom}</span></p>`;
         }
 
-        let type = element.parcelle_type !== null ? `<p>Type: <span class="font-bold">${element.parcelle_type}</span></p>` : '';
+        let type = element.plantation_nom !== null ? `<p>Type: <span class="font-bold">${element.plantation_nom}</span></p>` : '';
 
         const div = `
             <div class="border p-4 rounded-sm w-48">

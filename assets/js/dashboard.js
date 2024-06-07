@@ -1,13 +1,14 @@
 
-$("#dashboard").load('/user/components/gardens.php');
-
 function switchMenu(name)
 {
     if(name === "parameter"){
+        $("#dashboard").empty();
         $("#dashboard").load('./components/parameter.php');
     }else if(name === "garden"){
+        $("#dashboard").empty();
         $("#dashboard").load('/user/components/gardens.php');
     }else if(name === "plot"){
-        $("#dashboard").load('./components/plot.php');
+        $("#dashboard").empty();
+        $("#dashboard").load('/user/components/plot.php');
     }
 }

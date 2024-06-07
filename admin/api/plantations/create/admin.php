@@ -9,22 +9,12 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST") {
     exit; 
 }
 
-require('../../../conf/function.inc.php');
+require('../../../../conf/function.inc.php');
 
-if(!isset($_SESSION)){
-    session_start();
-}
 
-if(isset($_SESSION['id'])){
-    $userID = $_SESSION['id'];
-}
-
-$sql = "INSERT INTO parcelle (jardin_id, user_id, plantation_id, parcelle_nom, isAccepted) VALUES (:jardin_id, :userID, :type, :name, true)";
+$sql = "INSERT INTO plantations (plantation_nom) VALUES (:name)";
 $db = getConnection();
 $query = $db->prepare($sql);
-$query->bindParam(':jardin_id', $_POST['jardin']);
-$query->bindParam(':userID', $_POST['user']);
-$query->bindParam(':type', $_POST['type']);
 $query->bindParam(':name', $_POST['name']);
 
 $res = $query->execute();

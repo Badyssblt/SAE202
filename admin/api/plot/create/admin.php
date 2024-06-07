@@ -20,7 +20,7 @@ if(isset($_SESSION['id'])){
     $userID = $_SESSION['id'];
 }
 
-$sql = "INSERT INTO parcelle (jardin_id, user_id, parcelle_type, parcelle_nom, isAccepted) VALUES (:jardin_id, :userID, :type, :name, true)";
+$sql = "INSERT INTO parcelle (jardin_id, user_id, plantation_id, parcelle_nom, isAccepted) VALUES (:jardin_id, :userID, :type, :name, true)";
 $db = getConnection();
 $query = $db->prepare($sql);
 $query->bindParam(':jardin_id', $_POST['jardin']);

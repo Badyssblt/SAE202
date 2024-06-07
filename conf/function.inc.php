@@ -141,7 +141,7 @@ function addGarden($data, $file)
 {
     extract($data);
     $db = getConnection();
-    $sql = "INSERT INTO Jardin (jardin_nom, jardin_position, jardin_image, user_id) VALUES (:name, :position, :image, :userID)";
+    $sql = "INSERT INTO Jardin (jardin_nom, jardin_position, jardin_image, user_id, is_public) VALUES (:name, :position, :image, :userID, false)";
     $imageName = date("Y_m_d_H_i_s") . "---" . $file["image"]["name"];
     if(is_uploaded_file($file["image"]["tmp_name"])) {
         if(!move_uploaded_file($file["image"]["tmp_name"], "../assets/images/uploads/garden/".$imageName)) {

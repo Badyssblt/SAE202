@@ -13,7 +13,7 @@ require('../../conf/function.inc.php');
 
 $sql = "SELECT 
 parcelle.parcelle_id, 
-parcelle.parcelle_type,
+parcelle.plantation_id,
 parcelle.parcelle_nom,
 users.user_nom AS parcelle_user,
 parcelle.isAccepted

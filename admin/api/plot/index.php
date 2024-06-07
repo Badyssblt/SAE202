@@ -11,14 +11,15 @@ require('../../../conf/function.inc.php');
 
 $sql = "SELECT 
 parcelle.parcelle_id, 
-parcelle.parcelle_type,
 parcelle.parcelle_nom,
 users.user_nom AS parcelle_user,
-parcelle.isAccepted
+parcelle.isAccepted,
+plantations.plantation_nom
 FROM 
 parcelle 
 LEFT JOIN 
 users ON parcelle.user_id = users.user_id
+LEFT JOIN plantations ON parcelle.plantation_id = plantations.plantation_id
 WHERE 
 parcelle.jardin_id = :id";
 

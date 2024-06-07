@@ -19,16 +19,24 @@ $jardins = sql($sql);
 
 <div>
     <ul class="flex flex-row gap-4">
-        <button onclick="showMenu('listing')" class="bg-black text-white rounded-sm py-2 px-4">Mes jardins</button>
+        <button onclick="showMenu('garden')" class="bg-black text-white rounded-sm py-2 px-4">Mes jardins</button>
         <button onclick="showMenu('adding')" class="bg-black text-white rounded-sm py-2 px-4">Ajouter un jardin</button>
         <button onclick="showMenu('editing')" class="bg-black text-white rounded-sm py-2 px-4">Modifier mon jardin</button>
     </ul>
 </div>
 
+
+
+
 <?php
 // Liste des jardins
 ?>
-<div class="flex flex-wrap items-center justify-center mt-4" id="listing">
+
+<div id="garden" class="flex flex-row-reverse">
+    <div>
+    <canvas id="myChart"></canvas>
+    </div>
+    <div class="flex flex-wrap items-center justify-center mt-4" id="listing">
 <?php
         foreach($jardins as $jardin){ 
             ?>
@@ -52,6 +60,9 @@ $jardins = sql($sql);
 
     ?>
 </div>
+</div>
+
+
 
 
 
@@ -91,7 +102,7 @@ $jardins = sql($sql);
 // Formulaire d'ajout de parcelle
 ?>
 <div id="plantation_form" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
-        <form class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative" id="addPlotForm">
+        <form class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative" id="addPlotForm" onsubmit="addPlot(event)">
             <p id="plantation_text"></p>
             <button onclick="closeForm(event)" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -112,13 +123,13 @@ $jardins = sql($sql);
 // Fin Formulaire d'ajout de parcelle
 ?>
 
+
+
+
 <script>
-        const addPlotForm = document.getElementById("addPlotForm");
-        addPlotForm.addEventListener('submit', (event) => {
-            const jardinID = (document.getElementById("jardin_id")).value;
-            event.preventDefault();
-            addPlot(jardinID);
-        });
+
+
+        
 
 
 
@@ -148,8 +159,8 @@ $jardins = sql($sql);
 
     function displayForm(name, id){
         const form = document.getElementById("plantation_form");
-        const inputHidden = document.getElementById("jardin_id");
-        inputHidden.value = id;
+        const inputHiddens = document.getElementById("jardin_id");
+        inputHiddens.value = id;
         const plantationText = document.getElementById("plantation_text");
         const nameSpan = document.createElement("span");
         nameSpan.classList.add("font-bold");
@@ -177,16 +188,19 @@ $jardins = sql($sql);
         }
     }
 
-    async function addPlot(id, type)
+    async function addPlot(event)
     {
+        event.preventDefault();
         const typeDiv = document.getElementById("plantation");
+        const jardinID = (document.getElementById("jardin_id")).value;
 
+        console.log(typeDiv);
         try {
             const res = await $.ajax({
                 type: "POST",
                 url: "../../api/plot/create/index.php",
                 data: {
-                    id: id,
+                    id: jardinID,
                     name: typeDiv.value
                 },
                 dataType: "JSON",
