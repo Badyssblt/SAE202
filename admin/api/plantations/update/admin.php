@@ -1,25 +1,24 @@
 <?php
 
-// Ce fichier permet aux administrateurs du site d'ajouter une parcelle avec toutes les colonnes
-
 if ($_SERVER['REQUEST_METHOD'] !== "POST") {
     $response = ["message" => "Erreur lors de la requête"];
     header('Content-Type: application/json');
     echo json_encode($response);
-    exit; 
+    exit;
 }
 
 require('../../../../conf/function.inc.php');
 
 
-$sql = "INSERT INTO plantations (plantation_nom) VALUES (:name)";
+$sql = "UPDATE plantations SET plantation_nom = :nom WHERE plantation_id = :id";
 $db = getConnection();
 $query = $db->prepare($sql);
-$query->bindParam(':name', $_POST['name']);
+
+$query->bindParam(':nom', $_POST['name']);
+$query->bindParam(':id', $_POST['id']);
+
 
 $res = $query->execute();
 
-
 header('Content-Type: application/json');
-
 echo json_encode($res);
