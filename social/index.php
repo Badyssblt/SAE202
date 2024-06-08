@@ -138,26 +138,35 @@ function formatTimeAgo($timestamp)
 // Lister les commentaires
 ?>
 <div id="listing_com" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
-    <div class="flex justify-center relative w-1/4">
-        <button onclick="closeCommentary(event)" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>
-        </button>
-        <div class="flex flex-col gap-8 bg-white p-8 rounded-md w-full" id="listing-com__wrapper">
-            <div class="flex flex-col">
-                <div class="flex flex-row gap-2">
-                    <img src="/assets/images/uploads/users/" alt="" class="w-12 rounded-full">
-                    <div>
-                        <h3 class="font-bold"><?= $post['post_author'] ?></h3>
-                        <p><?= formatTimeAgo($post['created_at']) ?></p>
+
+    <div class="flex justify-center relative w-full">
+
+        <div class="bg-white w-1/4 relative">
+            <form class="mx-4 mt-4" onsubmit="publishComment(event)">
+                <input type="hidden" name="postId" id="postIdInput">
+                <input type="text" name="message" id="messageCommentary" placeholder="Entrer votre commentaire" class="w-full py-4 pl-4 bg-slate-200 rounded-md">
+            </form>
+            <button onclick="closeCommentary(event)" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div class="flex flex-col gap-8 bg-white p-8 rounded-md w-full overflow-auto h-96" id="listing-com__wrapper">
+                <div class="flex flex-col">
+                    <div class="flex flex-row gap-2">
+                        <img src="/assets/images/uploads/users/" alt="" class="w-12 rounded-full">
+                        <div>
+                            <h3 class="font-bold"><?= $post['post_author'] ?></h3>
+                            <p><?= formatTimeAgo($post['created_at']) ?></p>
+                        </div>
+                    </div>
+                    <div class="w-full mt-2">
+                        <p></p>
                     </div>
                 </div>
-                <div class="w-full mt-2">
-                    <p></p>
-                </div>
-            </div>
 
+            </div>
         </div>
+
     </div>
 </div>
 <?php
@@ -185,6 +194,7 @@ function formatTimeAgo($timestamp)
 
     function displayCommentaries(id) {
         const commentaryForm = document.getElementById("listing_com");
+        const postIdHidden = document.getElementById("postIdInput").value = id;
         commentaryForm.classList.remove("hidden");
         fetchCommentary(id);
     }
@@ -227,6 +237,30 @@ function formatTimeAgo($timestamp)
         })
 
 
+    }
+
+    async function publishComment(event) {
+
+        event.preventDefault();
+        const postId = document.getElementById("postIdInput").value;
+        const commentary = document.getElementById("messageCommentary").value;
+        try {
+            const res = await $.ajax({
+                type: "POST",
+                url: "../api/social/create/createCommentary.php",
+                data: {
+                    commentary,
+                    postId
+                },
+                dataType: "JSON",
+                success: function(response) {
+                    fetchCommentary(postId);
+                    document.getElementById("messageCommentary").value = "";
+                }
+            });
+        } catch (error) {
+
+        }
     }
 
 
