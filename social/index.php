@@ -32,6 +32,10 @@ GROUP BY
 
 $posts = sql($sql);
 
+if (isset($_SESSION) && isset($_SESSION['id'])) {
+    $userID = $_SESSION['id'];
+}
+
 
 
 
@@ -142,16 +146,23 @@ function formatTimeAgo($timestamp)
     <div class="flex justify-center relative w-full">
 
         <div class="bg-white w-1/4 relative">
-            <form class="mx-4 mt-4" onsubmit="publishComment(event)">
-                <input type="hidden" name="postId" id="postIdInput">
-                <input type="text" name="message" id="messageCommentary" placeholder="Entrer votre commentaire" class="w-full py-4 pl-4 bg-slate-200 rounded-md">
-            </form>
             <button onclick="closeCommentary(event)" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
             </button>
+            <form class="mx-4 mt-4" onsubmit="publishComment(event)">
+                <input type="hidden" name="postId" id="postIdInput">
+                <input type="text" name="message" id="messageCommentary" placeholder="Entrer votre commentaire" class="w-full py-4 pl-4 bg-slate-200 rounded-md">
+            </form>
+
             <div class="flex flex-col gap-8 bg-white p-8 rounded-md w-full overflow-auto h-96" id="listing-com__wrapper">
-                <div class="flex flex-col">
+                <div class="flex flex-col relative">
+                    <button onclick="displayDeleteVerification()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                        </svg>
+
+                    </button>
                     <div class="flex flex-row gap-2">
                         <img src="/assets/images/uploads/users/" alt="" class="w-12 rounded-full">
                         <div>
@@ -173,9 +184,62 @@ function formatTimeAgo($timestamp)
 // Fin Lister les commentaires
 ?>
 
+<?php
+// Supprimer un commentaire
+?>
+
+<div id="delete_com" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
+    <div class="flex justify-center flex-col p-6 rounded-md relative bg-white w-fit">
+        <button onclick="closeDeleteCommentary(event)" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <h4 class="font-bold">Voulez-vous supprimer ce commentaire ?</h4>
+        <div class="flex flex-row justify-center gap-4 mt-4">
+            <button class="bg-red-800 text-white py-2 px-4 rounded-sm" onclick="deleteComment()">Supprimer</button>
+            <button class="border text-black py-2 px-4 rounded-sm" onclick="closeDeleteCommentary()">Annuler</button>
+        </div>
+    </div>
+</div>
+
+
+<?php
+// Fin supprimer un commentaire
+?>
+
 
 <script>
     //#region Commentaires
+
+    let currentPost = null;
+
+    let userID = <?= json_encode($userID); ?>;
+
+    function displayCommentaries(id) {
+        const commentaryForm = document.getElementById("listing_com");
+        const postIdHidden = document.getElementById("postIdInput").value = id;
+        commentaryForm.classList.remove("hidden");
+        currentPost = id;
+        fetchCommentary(id);
+    }
+
+    function closeCommentary() {
+        const commentaryForm = document.getElementById("listing_com");
+        commentaryForm.classList.add("hidden");
+    }
+
+    function displayDeleteVerification(element) {
+        let commentaryId = (element.parentNode).getAttribute("data-commentaryId");
+        const commentaryForm = document.getElementById("delete_com");
+        commentaryForm.dataset.currentCommentary = commentaryId;
+        commentaryForm.classList.remove("hidden");
+    }
+
+    function closeDeleteCommentary() {
+        const commentaryForm = document.getElementById("delete_com");
+        commentaryForm.classList.add("hidden");
+    }
+
 
     async function fetchCommentary(id) {
         try {
@@ -192,18 +256,6 @@ function formatTimeAgo($timestamp)
         }
     }
 
-    function displayCommentaries(id) {
-        const commentaryForm = document.getElementById("listing_com");
-        const postIdHidden = document.getElementById("postIdInput").value = id;
-        commentaryForm.classList.remove("hidden");
-        fetchCommentary(id);
-    }
-
-    function closeCommentary() {
-        const commentaryForm = document.getElementById("listing_com");
-        commentaryForm.classList.add("hidden");
-    }
-
     function hydrateCommentaryList(data) {
         const wrapper = $("#listing-com__wrapper");
 
@@ -218,9 +270,17 @@ function formatTimeAgo($timestamp)
         }
 
         data.forEach((element) => {
+            const isCurrentUser = userID == element['commentary_author_id'];
+            const deleteButton = isCurrentUser ? `<button onclick="displayDeleteVerification(this)" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+</svg>
+</button>` : '';
+            console.log(element['commentary_author']);
             const div =
                 `
-            <div class="flex flex-col">
+            <div class="flex flex-col relative" data-commentaryId="${element['commentary_id']}">
+            ${deleteButton}
+            </button>
             <div class="flex flex-row gap-2">
                 <img src="/assets/images/uploads/users/${element['commentary_author_picture']}" alt="" class="w-12 rounded-full">
                 <div>
@@ -256,6 +316,23 @@ function formatTimeAgo($timestamp)
                 success: function(response) {
                     fetchCommentary(postId);
                     document.getElementById("messageCommentary").value = "";
+                }
+            });
+        } catch (error) {
+
+        }
+    }
+
+    async function deleteComment() {
+        const commentaryId = document.getElementById("delete_com").dataset.currentCommentary;
+        try {
+            const res = await $.ajax({
+                type: "GET",
+                url: "../api/social/delete/index.php?id=" + commentaryId,
+                dataType: "JSON",
+                success: function(response) {
+                    fetchCommentary(currentPost);
+                    closeDeleteCommentary();
                 }
             });
         } catch (error) {

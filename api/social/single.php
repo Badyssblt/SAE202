@@ -24,7 +24,8 @@ commentary.commentary_id,
 commentary.commentary_content, 
 commentary.created_at, 
 users.user_nom AS commentary_author, 
-users.user_picture AS commentary_author_picture
+users.user_picture AS commentary_author_picture,
+users.user_id AS commentary_author_id
 FROM 
 commentary
 INNER JOIN 
