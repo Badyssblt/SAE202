@@ -1,41 +1,94 @@
 <?php
-
+$title = "Nos jardins";
 require('../conf/header.inc.php');
 require('../conf/function.inc.php');
 
+$sql = "SELECT jardin_id, jardin_image
+FROM Jardin
+ORDER BY RAND()
+LIMIT 3";
+$randomJardin = sql($sql);
 
 $sql = "SELECT Jardin.*, users.user_nom, COUNT(parcelle.parcelle_id) AS parcelle_count FROM Jardin INNER JOIN users ON Jardin.user_id = users.user_id LEFT JOIN parcelle ON Jardin.jardin_id = parcelle.jardin_id  WHERE Jardin.is_public = true GROUP BY Jardin.jardin_id, users.user_nom";
 $jardins = sql($sql);
 ?>
-<div class="px-8">
-<h2 class="font-bold text-xl mb-4">Listes des jardins à Troyes</h2>
-<div class="ml-4 my-4">
-    <p class="font-bold text-lg">Trier par</p>
-    <div class="flex flex-row gap-4">
-        <button onclick="sortBy('name')">Nom</button>
-        <button onclick="sortBy('name')">Parcelles</button>
-        <button onclick="sortBy('name')">Date de création</button>
+
+<div>
+    <h2 class="font-bold text-2xl mb-4 text-center">Nos jardins</h2>
+    <div>
+        <h3 class="font-bold text-xl p-10">Nos jardins les plus fréquentés</h3>
+        <section id="image-carousel" class="splide w-full h-48 md:h-[500px] overflow-hidden" aria-label="Beautiful Images">
+            <div class="splide__track">
+                <ul class="splide__list">
+                    <?php
+                    foreach ($randomJardin as $jardin) { ?>
+                        <li class="splide__slide">
+                            <a href="/garden/single.php?id=<?= $jardin['jardin_id'] ?>"><img src="/assets/images/uploads/garden/<?= $jardin['jardin_image'] ?>" alt=""></a>
+                        </li>
+                    <?php
+
+                    }
+                    ?>
+                </ul>
+            </div>
+        </section>
     </div>
 </div>
-<div class="flex flex-wrap gap-8">
-    <?php
-        foreach($jardins as $jardin){ ?>
-            <div class="border rounded-sm flex flex-col gap-4 w-96">
-                <img src="../assets/images/uploads/garden/<?= $jardin['jardin_image'] ?>" alt="" class="w-full">
-                <h3><?= $jardin['jardin_nom'] ?></h3>
-                <p>Nombre de parcelle: <span class="font-bold"><?= $jardin['parcelle_count'] ?></span></p>
-                <h4>Propriétaire: <span class="font-bold"><?= $jardin['user_nom'] ?></span></h4>
+
+<div class="px-8 mb-12">
+    <div class="ml-4 my-4">
+        <p class="font-bold text-lg">Trier par :</p>
+        <div class="flex flex-row gap-4">
+            <button onclick="sortBy('name')">Nom</button>
+            <button onclick="sortBy('name')">Parcelles</button>
+            <button onclick="sortBy('name')">Date de création</button>
+        </div>
+    </div>
+    <div class="flex flex-wrap gap-8">
+        <?php
+        foreach ($jardins as $jardin) { ?>
+            <div class="flex flex-col gap-4 w-96">
+                <div class="w-full h-64 rounded-xl overflow-hidden">
+                    <img src="../assets/images/uploads/garden/<?= $jardin['jardin_image'] ?>" alt="" class="w-full h-full object-cover">
+                </div>
+                <h3 class="font-bold text-center text-xl"><?= $jardin['jardin_nom'] ?></h3>
+                <p class="font-bold text-center">Nombre de parcelle: <span class="font-bold"><?= $jardin['parcelle_count'] ?></span></p>
+                <h4 class="font-bold text-center">Propriétaire: <span class="font-bold"><?= $jardin['user_nom'] ?></span></h4>
                 <div>
                     <a href="./single.php?id=<?= $jardin['jardin_id'] ?>" class="bg-black text-white py-2 px-4 mx-4 rounded-sm flex justify-center mt-2">Voir plus</a>
                 </div>
             </div>
+
         <?php
         }
 
-    ?>
-    
-</div>
+        ?>
+
+    </div>
 
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new Splide('#image-carousel', {
+            type: 'loop',
+            autoplay: true,
+            interval: 3000,
+            pagination: true,
+            arrows: true,
+        }).mount();
+    });
+</script>
 
+
+<style>
+    .splide__slide img {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<?php
+
+require("../conf/footer.inc.php")
+?>

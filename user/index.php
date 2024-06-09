@@ -1,4 +1,6 @@
 <?php
+$title = "Mon compte";
+
 
 require('../conf/header.inc.php');
 require('../conf/function.inc.php');
@@ -9,13 +11,13 @@ require('../conf/function.inc.php');
 
 <main class="flex flex-row">
 
-<?php
-require('./components/sidebar.php');
-?>
+    <?php
+    require('./components/sidebar.php');
+    ?>
 
-<div id="dashboard">
+    <div id="dashboard">
 
-</div>
+    </div>
 
 </main>
 

@@ -1,0 +1,18 @@
+.bg-main {
+    background: #93A267;
+}
+
+.bg-second {
+    background: #CADBB7;
+}
+
+.image-mobile {
+    background-image: url('/assets/images/image_fond_mobile.png');
+}
+
+
+@media (min-width: 768px) {
+    .image-mobile {
+        background-image: url('/assets/images/image_fond.png'); /* Image pour desktop */
+    }
+}
