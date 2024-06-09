@@ -4,7 +4,7 @@ require('../conf/header.inc.php');
 require('../conf/function.inc.php');
 
 $sql = "SELECT jardin_id, jardin_image
-FROM Jardin
+FROM Jardin WHERE is_public = true
 ORDER BY RAND()
 LIMIT 3";
 $randomJardin = sql($sql);

@@ -17,7 +17,8 @@ function findAll($tableName)
     return $query->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function delete($tableName, $column, $id){
+function delete($tableName, $column, $id)
+{
     $db = getConnection();
     $sql = "DELETE FROM $tableName WHERE $column = :id";
     $query = $db->prepare($sql);
@@ -28,7 +29,7 @@ function delete($tableName, $column, $id){
 
 function findOne($tableName, $id)
 {
-    if(!is_int($id)) return false;
+    if (!is_int($id)) return false;
     $db = getConnection();
     $sql = "SELECT * FROM " . $tableName . "WHERE id = :id";
     $query = $db->prepare($sql);
@@ -37,7 +38,8 @@ function findOne($tableName, $id)
     return $query->fetch();
 }
 
-function sql($sql){
+function sql($sql)
+{
     $db = getConnection();
     $query = $db->prepare($sql);
     $query->execute();
@@ -61,13 +63,13 @@ function register($data)
     $query->bindParam(':email', $email);
     $query->execute();
     $user = $query->fetch();
-    if($user) {
+    if ($user) {
         setErrorMessage("Un utilisateur avec cette adresse email existe déjà.", "../user/signup.php");
     }
-    $sql = "INSERT INTO users (user_nom, user_email, user_password, user_picture) VALUES (:name, :email, :password, 'test')";
+    $sql = "INSERT INTO users (user_nom, user_email, user_password, user_picture) VALUES (:name, :email, :password, 'user.png')";
     $password = password_hash($password, PASSWORD_DEFAULT);
     $query = $db->prepare($sql);
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return ['message' => 'Veuillez entrer un message valide'];
         die();
     }
@@ -75,8 +77,8 @@ function register($data)
     $query->bindParam(':email', $email);
     $query->bindParam(':password', $password);
     $res = $query->execute();
-    if($res){
-        if(!isset($_SESSION)){
+    if ($res) {
+        if (!isset($_SESSION)) {
             session_start();
         }
         $_SESSION['success']['message'] = "Inscription réussit, veuillez vous connecter";
@@ -94,9 +96,9 @@ function login($data)
     $query->bindParam(':email', $email);
     $query->execute();
     $user = $query->fetch();
-    if(!$user) setErrorMessage("L'utilisateur est introuvable", '../user/signin.php');
-    
-    if(password_verify($password, $user['user_password'])){
+    if (!$user) setErrorMessage("L'utilisateur est introuvable", '../user/signin.php');
+
+    if (password_verify($password, $user['user_password'])) {
         session_start();
         $_SESSION['error'] = [];
         $_SESSION['name'] = $user['user_nom'];
@@ -105,18 +107,19 @@ function login($data)
         $_SESSION['error']['message'] = '';
         $_SESSION['success']['message'] = '';
         header('Location: /');
-    }else {
+    } else {
         setErrorMessage("Le mot de passe est incorrect", '../user/signin.php');
     }
 }
 
-function setErrorMessage($msg, $redirection){
-    if(!isset($_SESSION)){
+function setErrorMessage($msg, $redirection)
+{
+    if (!isset($_SESSION)) {
         session_start();
         $_SESSION['error']['message'] = $msg;
         header("Location: $redirection");
         die();
-    }else {
+    } else {
         $_SESSION['error']['message'] = $msg;
         header("Location: $redirection");
         die();
@@ -125,12 +128,12 @@ function setErrorMessage($msg, $redirection){
 
 function setSuccessMessage($msg, $redirection)
 {
-    if(!isset($_SESSION)){
+    if (!isset($_SESSION)) {
         session_start();
         $_SESSION['success']['message'] = $msg;
         header("Location: $redirection");
         die();
-    }else {
+    } else {
         $_SESSION['success']['message'] = $msg;
         header("Location: $redirection");
         die();
@@ -143,32 +146,31 @@ function addGarden($data, $file)
     $db = getConnection();
     $sql = "INSERT INTO Jardin (jardin_nom, jardin_position, jardin_image, user_id, is_public) VALUES (:name, :position, :image, :userID, false)";
     $imageName = date("Y_m_d_H_i_s") . "---" . $file["image"]["name"];
-    if(is_uploaded_file($file["image"]["tmp_name"])) {
-        if(!move_uploaded_file($file["image"]["tmp_name"], "../assets/images/uploads/garden/".$imageName)) {
-            echo '<p>Problème avec la sauvegarde de l\'image, désolé...</p>'."\n";
+    if (is_uploaded_file($file["image"]["tmp_name"])) {
+        if (!move_uploaded_file($file["image"]["tmp_name"], "../assets/images/uploads/garden/" . $imageName)) {
+            echo '<p>Problème avec la sauvegarde de l\'image, désolé...</p>' . "\n";
             die();
         }
     } else {
-        echo '<p>Problème : image non chargée...</p>'."\n";
+        echo '<p>Problème : image non chargée...</p>' . "\n";
         die();
     }
 
-    if(!isset($_SESSION)) session_start();
+    if (!isset($_SESSION)) session_start();
 
-    if(!isset($_SESSION['id'])){
+    if (!isset($_SESSION['id'])) {
         header('Location: ../user/signin.php');
         die();
     }
     $query = $db->prepare($sql);
     $query->bindParam(':name', $name);
-    $query->bindParam(':position', $position);
+    $query->bindParam(':position', $coor);
     $query->bindParam(':image', $imageName);
     $query->bindParam(':userID', $_SESSION['id']);
     $res = $query->execute();
-    if($res){
+
+
+    if ($res) {
         setSuccessMessage("Votre jardin a bien été ajoutée", "../user/index.php");
     }
 }
-
-
-
