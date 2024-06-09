@@ -44,7 +44,7 @@ $jardins = sql($sql);
                     <p>Nombre de parcelle: <span class="font-bold"><?= $jardin['parcelle_count'] ?></span></p>
                     <h4>Propriétaire: <span class="font-bold"><?= $jardin['user_nom'] ?></span></h4>
                     <div class="flex flex-wrap gap-4">
-                        <button class="border text-black py-2 px-4 rounded-sm">Modifier</button>
+                        <button class="border text-black py-2 px-4 rounded-sm" onclick='displayEditForm(<?= json_encode($jardin); ?>)'>Modifier</button>
                         <button onclick="deleteGarden(<?= $jardin['jardin_id'] ?>)" class="bg-red-800 text-white py-2 px-4 rounded-sm">Supprimer</button>
                         <button onclick="displayForm('<?= $jardin['jardin_nom'] ?>', <?= $jardin['jardin_id'] ?>)" class="bg-lime-800 text-white py-2 px-4 rounded-sm">Ajouter une parcelle</button>
                         <a href="../../garden/single.php?id=<?= $jardin['jardin_id'] ?>" class="bg-black text-white py-2 px-4 rounded-sm">Voir plus</a>
@@ -96,6 +96,41 @@ $jardins = sql($sql);
         ?>
     </form>
 </div>
+
+
+
+<?php
+// Formulaire d'édition d'un jardin
+?>
+<div id="editing" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
+    <form method="POST" class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative" id="editGardenForm" action="../process/editGarden.proc.php" enctype="multipart/form-data">
+        <p id="edit_text"></p>
+        <button onclick="displayEditForm()" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <div class="flex flex-col">
+            <label for="name">Entrer le nom du jardin</label>
+            <input type="text" name="nameEdit" id="nameEdit" placeholder="Nom du jardin" class="border pl-4 py-2">
+        </div>
+        <div class="flex flex-col">
+            <label for="autcompleteEdit">Entrer la position du jardin</label>
+            <input type="text" name="positionEdit" id="autocompleteEdit" class="border pl-4 py-2" placeholder="Entrer à nouveau la position du jardin">
+            <div id="suggestionsEdit"></div>
+        </div>
+
+        <input type="hidden" name="coor" id="coorEdit">
+        <input type="hidden" name="id" id="idEditing">
+
+
+        <input type="file" name="image" id="image">
+        <button type="submit" class="bg-black text-white rounded-md py-2">Modifier un jardin</button>
+    </form>
+</div>
+<?php
+// Fin Formulaire d'édition d'un jardin
+?>
+
 
 
 <?php
@@ -158,6 +193,15 @@ $jardins = sql($sql);
         plantationText.textContent = "Ajouter une parcelle à ";
         plantationText.append(nameSpan);
         form.classList.remove("hidden");
+    }
+
+    function displayEditForm(jardin) {
+        const form = document.getElementById("editing");
+        const inputHidden = document.getElementById("idEditing");
+        inputHidden.value = jardin['jardin_id'];
+        document.getElementById("nameEdit").value = jardin['jardin_nom'];
+
+        form.classList.toggle("hidden");
     }
 
     async function deleteGarden(id) {
@@ -232,7 +276,7 @@ $jardins = sql($sql);
                 <p>Nombre de parcelle: <span class="font-bold">${element['parcelle_count']}</span></p>
                 <h4>Propriétaire: <span class="font-bold">${element['user_nom']}</span></h4>
                 <div class="flex flex-wrap gap-4">
-                    <button class="border text-black py-2 px-4 rounded-sm">Modifier</button>
+                    <button class="border text-black py-2 px-4 rounded-sm" onclick="displayEditForm(${JSON.stringify(element)})">Modifier</button>
                     <button onclick="deleteGarden(${element['jardin_id']})" class="bg-red-800 text-white py-2 px-4 rounded-sm">Supprimer</button>
                     <button onclick="displayForm('${element['jardin_nom']}', ${element['jardin_id']})" class="bg-lime-800 text-white py-2 px-4 rounded-sm">Ajouter une parcelle</button>
                     <a href="../../garden/single.php?id=${element['jardin_id']}" class="bg-black text-white py-2 px-4 rounded-sm">Voir plus</a>
@@ -275,7 +319,40 @@ $jardins = sql($sql);
         $('#selected-coordinates').text(`Longitude: ${lon}, Latitude: ${lat}`);
     }
 
+
+    function fetchAutocompleteSuggestionsEdit(query) {
+        if (query.length >= 3) {
+            $.ajax({
+                url: `https://api.geoapify.com/v1/geocode/autocomplete`,
+                data: {
+                    apiKey: apiKey,
+                    text: query
+                },
+                success: function(data) {
+                    $('#suggestionsEdit').empty();
+                    data.features.forEach(feature => {
+                        const {
+                            lon,
+                            lat,
+                            formatted
+                        } = feature.properties;
+                        $('#suggestionsEdit').append(`<li data-lon="${lon}" data-lat="${lat}" data-formatted="${formatted}">${formatted}</li>`);
+                    });
+                }
+            });
+        } else {
+            $('#suggestionsEdit').empty();
+        }
+    }
+
+    function displaySelectedCoordinatesEdit(lon, lat) {
+        $('#selected-coordinatesEdit').text(`Longitude: ${lon}, Latitude: ${lat}`);
+    }
+
     $(document).ready(function() {
+
+        // AJOUTER JARDIN
+
         $('#autocomplete').on('input', function() {
             const query = $(this).val();
             fetchAutocompleteSuggestions(query);
@@ -286,14 +363,30 @@ $jardins = sql($sql);
             const lat = $(this).data('lat');
             const formatted = $(this).data('formatted');
 
-            // Mettre à jour le champ de saisie avec le texte de la suggestion
             $('#autocomplete').val(formatted);
 
             document.getElementById("coor").value = lat + "," + lon;
-            // Afficher les coordonnées sélectionnées
             displaySelectedCoordinates(lon, lat);
-            // Vider les suggestions après la sélection
             $('#suggestions').empty();
+        });
+
+        // MODIFIER JARDIN
+
+        $('#autocompleteEdit').on('input', function() {
+            const query = $(this).val();
+            fetchAutocompleteSuggestionsEdit(query);
+        });
+
+        $('#suggestionsEdit').on('click', 'li', function() {
+            const lon = $(this).data('lon');
+            const lat = $(this).data('lat');
+            const formatted = $(this).data('formatted');
+
+            $('#autocompleteEdit').val(formatted);
+
+            document.getElementById("coorEdit").value = lat + "," + lon;
+            displaySelectedCoordinatesEdit(lon, lat);
+            $('#suggestionsEdit').empty();
         });
     });
 </script>
