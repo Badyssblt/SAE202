@@ -105,7 +105,7 @@ $jardins = sql($sql);
 <div id="editing" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
     <form method="POST" class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative" id="editGardenForm" action="../process/editGarden.proc.php" enctype="multipart/form-data">
         <p id="edit_text"></p>
-        <button onclick="displayEditForm()" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <button type="button" onclick="displayEditForm()" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
         </button>
