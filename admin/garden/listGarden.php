@@ -16,7 +16,7 @@ $users = findAll("users");
     <a href="./listGarden.php" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Liste des jardins</a>
     <a href="../plots/listPlot.php" class="border text-black py-2 px-4 rounded-sm flex justify-center mt-2">Liste des parcelles</a>
     <a href="../users/listUsers.php" class="border text-black py-2 px-4 rounded-sm flex justify-center mt-2">Liste des utilisateurs</a>
-    <a href="../plantations/listPlantations.php" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Liste des plantations</a>
+    <a href="../plantations/listPlantations.php" class="border text-black py-2 px-4 rounded-sm flex justify-center mt-2">Liste des plantations</a>
 </div>
 
 <h2 class="font-bold text-xl mt-12 mb-8">Liste des jardins</h2>

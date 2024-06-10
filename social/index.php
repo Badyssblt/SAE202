@@ -1,12 +1,19 @@
 <?php
 
 require('../conf/header.inc.php');
+
+?>
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
+
+
+<?php
+
 require('../conf/function.inc.php');
 
 $sql = "SELECT 
     post.post_id, 
-    post.post_nom, 
     post.post_content, 
+    post.post_image,
     post.created_at,
     users.user_nom AS post_author, 
     users.user_picture,
@@ -23,7 +30,6 @@ LEFT JOIN
     commentary ON post.post_id = commentary.post_id
 GROUP BY 
     post.post_id, 
-    post.post_nom, 
     post.post_content, 
     post.created_at,
     users.user_nom,
@@ -60,7 +66,9 @@ function formatTimeAgo($timestamp)
 
 ?>
 
-
+<div>
+    <button onclick="displayCreateForm()">Créer une publication</button>
+</div>
 <div class="flex flex-col items-center gap-16">
     <?php
 
@@ -84,6 +92,9 @@ function formatTimeAgo($timestamp)
                     <h3 class="font-bold"><?= $post['post_author'] ?></h3>
                     <p><?= formatTimeAgo($post['created_at']) ?></p>
                 </div>
+            </div>
+            <div class="mt-4">
+                <img src="../assets/images/uploads/posts/<?= $post['post_image'] ?>" alt="">
             </div>
             <div class="mt-4">
                 <?= $post['post_content'] ?>
@@ -119,17 +130,7 @@ function formatTimeAgo($timestamp)
 
                     <h4><?= $post['commentary_count'] ?></h4>
                 </div>
-                <div class="flex flex-row">
-                    <?php
-                    // Icon du partage
-                    ?>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-                    </svg>
-
-
-                    <button>Partager</button>
-                </div>
+                <div></div>
             </div>
         </div>
     <?php
@@ -208,12 +209,92 @@ function formatTimeAgo($timestamp)
 ?>
 
 
+<?php
+// Créer une publication
+?>
+<div id="createPost" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
+    <form onsubmit="createPost(event);" class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative" id="editForm" action="#" method="POST" enctype="multipart/form-data">
+        <p class="font-bold text-xl">Créer une publication</p>
+        <input type="file" name="image" id="imagePost">
+        <input type="hidden" name="postContent" id="postContent">
+        <button type="button" onclick="displayCreateForm()" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <div class="flex flex-col mt-2">
+        <div id="editor">
+            <p>Hello World!</p>
+            <p>Some initial <strong>bold</strong> text</p>
+            <p><br /></p>
+        </div>
+
+        </div>
+        <button type="submit" class="bg-lime-800 text-white py-2 px-4 rounded-sm mt-4">Définir la plantation</button>
+    </form>
+</div>
+<?php
+// Fin créer une publication
+?>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+
 <script>
     //#region Commentaires
 
     let currentPost = null;
 
     let userID = <?= json_encode($userID); ?>;
+
+
+    function displayCreateForm()
+    {
+        const form = document.getElementById("createPost");
+        form.classList.toggle("hidden");
+    }
+
+    async function createPost(event) {
+        event.preventDefault();
+
+        const quillContent = quill.root.innerHTML;
+        document.getElementById('postContent').value = quillContent;
+
+        
+        const formData = new FormData();
+        formData.append('postContent', quillContent);
+
+        const imageFile = document.getElementById('imagePost').files[0];
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
+
+        try {
+            const res = await $.ajax({
+                type: "POST",
+                url: "../api/social/create/createPost.php",
+                data: formData,
+                dataType: "JSON",
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    window.location.reload();
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    
+
+      function getImagesFromEditor() {
+    const editorContent = quill.root.innerHTML;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(editorContent, 'text/html');
+    const images = doc.querySelectorAll('img');
+    const imageUrls = Array.from(images).map(img => img.src);
+    return imageUrls;
+  }
+
 
     function displayCommentaries(id) {
         const commentaryForm = document.getElementById("listing_com");
@@ -450,4 +531,16 @@ function formatTimeAgo($timestamp)
     }
 
     //#endregion
+
+
+    const quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, false] }],
+                    ['bold', 'italic', 'underline']
+                                ],
+            }
+        });
+
 </script>
