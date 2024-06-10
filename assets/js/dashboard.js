@@ -1,9 +1,9 @@
 
 function switchMenu(name)
 {
-    if(name === "parameter"){
+    if(name == "parameters"){
         $("#dashboard").empty();
-        $("#dashboard").load('./components/parameter.php');
+        $("#dashboard").load('/user/components/parameters.php');
     }else if(name === "garden"){
         $("#dashboard").empty();
         $("#dashboard").load('/user/components/gardens.php');
