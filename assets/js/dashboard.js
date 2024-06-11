@@ -12,3 +12,5 @@ function switchMenu(name)
         $("#dashboard").load('/user/components/plot.php');
     }
 }
+
+switchMenu("parameters");

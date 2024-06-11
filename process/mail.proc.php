@@ -4,12 +4,18 @@ require('../conf/function.inc.php');
 
 extract($_POST);
 
+var_dump($_POST);
 
-$headers = 'From: sender@example.com' . "\r\n" .
-           'Reply-To: sender@example.com' . "\r\n" .
-           'X-Mailer: PHP/' . phpversion();
+$email_dest = "mmi23g02@mmi-troyes.fr";
 
-if (mail($email, $subject, $message, $headers)) {
+$headers['From'] = $email;
+$headers['Reply-to'] = $email;
+$headers['X-Mailer'] = 'PHP/' . phpversion();
+$headers['MIME-Version'] = '1.0';
+$headers['Content-type'] = 'text/html; charset=utf-8';
+
+
+if (mail($email_dest, $subject, $message, $headers)) {
     echo 'Email envoyé avec succès';
 } else {
     echo 'L\'envoi de l\'email a échoué';
