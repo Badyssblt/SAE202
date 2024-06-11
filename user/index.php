@@ -9,7 +9,7 @@ require('../conf/function.inc.php');
 
 ?>
 
-<main class="flex flex-row">
+<main class="flex flex-col md:flex-row">
 
     <?php
     require('./components/sidebar.php');

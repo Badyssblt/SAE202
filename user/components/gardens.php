@@ -30,11 +30,13 @@ $jardins = sql($sql);
 ?>
 
 <div id="garden" class="flex flex-row-reverse">
-    <div>
-        <canvas id="myChart"></canvas>
-    </div>
     <div class="flex flex-wrap items-center justify-center mt-4" id="listing">
         <?php
+        if(count($jardins) <= 0){ ?>
+            <p>Vous n'avez aucun jardin</p>
+            <button onclick="showMenu('adding')" class="border px-4 py-2 ml-2">Créez-en un maintenant</button>
+        <?php
+        }
         foreach ($jardins as $jardin) {
         ?>
             <div class="border rounded-sm flex flex-col gap-4 w-96">
@@ -45,7 +47,7 @@ $jardins = sql($sql);
                     <h4>Propriétaire: <span class="font-bold"><?= $jardin['user_nom'] ?></span></h4>
                     <div class="flex flex-wrap gap-4">
                         <button class="border text-black py-2 px-4 rounded-sm" onclick='displayEditForm(<?= json_encode($jardin); ?>)'>Modifier</button>
-                        <button onclick="deleteGarden(<?= $jardin['jardin_id'] ?>)" class="bg-red-800 text-white py-2 px-4 rounded-sm">Supprimer</button>
+                        <button onclick="displayVerificationDelete(<?= $jardin['jardin_id'] ?>)" class="bg-red-800 text-white py-2 px-4 rounded-sm">Supprimer</button>
                         <button onclick="displayForm('<?= $jardin['jardin_nom'] ?>', <?= $jardin['jardin_id'] ?>)" class="bg-lime-800 text-white py-2 px-4 rounded-sm">Ajouter une parcelle</button>
                         <a href="../../garden/single.php?id=<?= $jardin['jardin_id'] ?>" class="bg-black text-white py-2 px-4 rounded-sm">Voir plus</a>
                     </div>
@@ -105,7 +107,7 @@ $jardins = sql($sql);
 <div id="editing" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
     <form method="POST" class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative" id="editGardenForm" action="../process/editGarden.proc.php" enctype="multipart/form-data">
         <p id="edit_text"></p>
-        <button type="button" onclick="displayEditForm()" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <button type="button" onclick="closeEditForm()" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
         </button>
@@ -134,10 +136,32 @@ $jardins = sql($sql);
 
 
 <?php
+// Formulaire Vérification suppression jardin
+?>
+<div id="deleteVerif" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
+    <form method="POST" class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative" id="editGardenForm" action="../process/editGarden.proc.php" enctype="multipart/form-data">
+        <p id="edit_text"></p>
+        <button type="button" onclick="displayVerificationDelete()" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <input type="hidden" name="jardinID" id="jardinIdDelete">
+        <div>
+            <button onclick="deleteGarden(event)" class="bg-red-800 text-white py-2 px-4 rounded-sm">Supprimer</button>
+            <button class="border px-4 py-2">Annuler</button>
+        </div>
+    </form>
+</div>
+<?php
+// Fin Vérification suppression jardin
+?>
+
+
+<?php
 // Formulaire d'ajout de parcelle
 ?>
 <div id="plantation_form" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
-    <form class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative" id="addPlotForm" onsubmit="addPlot(event)">
+    <form class="flex py-24 flex-col bg-white py-8 px-10 rounded-sm relative w-full h-screen md:w-fit md:h-fit" id="addPlotForm" onsubmit="addPlot(event)">
         <p id="plantation_text"></p>
         <button onclick="closeForm(event)" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -194,6 +218,7 @@ $jardins = sql($sql);
         plantationText.append(nameSpan);
         form.classList.remove("hidden");
     }
+    
 
     function displayEditForm(jardin) {
         const form = document.getElementById("editing");
@@ -201,10 +226,31 @@ $jardins = sql($sql);
         inputHidden.value = jardin['jardin_id'];
         document.getElementById("nameEdit").value = jardin['jardin_nom'];
 
-        form.classList.toggle("hidden");
+        form.classList.remove("hidden");
     }
 
-    async function deleteGarden(id) {
+    function displayVerificationDelete(id)
+    {
+        const form = document.getElementById("deleteVerif");
+
+        if(!id){
+            form.classList.toggle("hidden");
+        }else {
+            document.getElementById("jardinIdDelete").value = id;
+            form.classList.toggle("hidden");
+        }
+        
+    }
+
+    function closeEditForm()
+    {
+        const form = document.getElementById("editing");
+        form.classList.add("hidden");
+    }
+
+    async function deleteGarden(event) {
+        event.preventDefault();
+        const id = document.getElementById("jardinIdDelete").value;
         try {
             const res = await $.ajax({
                 type: "GET",
@@ -215,6 +261,7 @@ $jardins = sql($sql);
                 dataType: "JSON",
                 success: function(response) {
                     fetchGardens();
+                    displayVerificationDelete();
                 }
             });
         } catch (error) {
@@ -268,6 +315,16 @@ $jardins = sql($sql);
     function displayGarden(data) {
         const wrapper = $("#listing");
         wrapper.empty();
+        if(data.length <= 0){
+            const div = 
+            `
+            <p>Vous n'avez aucun jardin</p>
+            <button onclick="showMenu('adding')" class="border px-4 py-2 ml-2">Créez-en un maintenant</button>
+            `;
+            wrapper.append(div);
+            return;
+        }
+
         data.forEach(element => {
             const div = `<div class="border rounded-sm flex flex-col gap-4 w-96">
                 <img src="../assets/images/uploads/garden/${element['jardin_image']}" alt="" class="w-full">
