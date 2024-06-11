@@ -36,7 +36,7 @@
             <li class="flex flex-row gap-2"><img src="/assets/images/admin.png" alt=""><a href="/admin/garden/listGarden.php">Administrateur</a></li>
         </div>
         <div class="mt-4 md:mt-0">
-            <form action="#">
+            <form action="/search/index.php" method="GET">
                 <input placeholder="Rechercher" type="search" name="query" id="query" class="bg-no-repeat pr-6 pl-4 py-2 border focus:outline-none" style="background-image: url('/assets/images/search.png'); background-position: right 6px center;">
             </form>
         </div>
