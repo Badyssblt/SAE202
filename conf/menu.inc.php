@@ -2,11 +2,25 @@
 
 ?>
 
-<header class="px-10">
+<header class="px-10 mb-4">
     <div class="flex flex-row justify-between mt-8">
         <h1><a href="/"><img src="/assets/images/icon.png" alt=""></a></h1>
-        <div class="flex items-center md:hidden">
+        <div class="flex items-center flex-col md:hidden">
+            <?php
+                if(isset($_SESSION['id'])){ ?>
         <li class="list-none <?php echo ($activePage === 'Account') ? 'underline' : ''; ?>"><a href="/user" class="bg-main rounded-full px-6 py-2 text-white">Mon profil</a></li>
+        <li class="list-none mt-6 "><a class="font-bold shadow-md px-4 py-2 rounded-lg" href="/social/index.php">Planta.net</a></li>
+
+<?php
+                }else { ?>
+                <div class="border-r-2 pr-2 flex flex-col gap-2">
+                    <li class="list-none text-center"><a href="/user/signup.php" class="font-bold <?php echo ($activePage === 'register') ? 'underline' : ''; ?>">S'inscrire</a></li>
+                    <li class="list-none"><a href="/user/signin.php" class="bg-main px-6 text-white py-2 rounded-full <?php echo ($activePage === 'login') ? 'underline' : ''; ?>">Se connecter</a></li>
+                </div>
+<?php
+                }
+            ?>
+
         </div>
         <div class="hidden md:flex flex-row gap-8">
             <?php
@@ -37,7 +51,7 @@
     <menu class="fixed bottom-0 bg-white w-full py-4 border-t-2 left-0 px-10 z-50 md:hidden">
         <div class="flex flex-row justify-between bg-white">
         <li class="flex flex-row gap-2">
-                <a href="/garden" class="<?php echo ($activePage === 'garden') ? 'underline' : ''; ?> whitespace-nowrap">           <img src="/assets/images/plants.png" alt=""></a>
+                <a href="/garden" class="<?php echo ($activePage === 'garden') ? 'underline' : ''; ?> whitespace-nowrap"><img src="/assets/images/plants.svg"  alt=""></a>
             </li>
             <li class="flex flex-row gap-2">
                 <a href="/admin/garden/listGarden.php" class="<?php echo ($activePage === 'admin') ? 'underline' : ''; ?> whitespace-nowrap"><img src="/assets/images/admin.png" alt=""></a>
@@ -46,7 +60,7 @@
                 <a href="/contact/index.php" class="<?php echo ($activePage === 'contact') ? 'underline' : ''; ?> whitespace-nowrap"><img src="/assets/images/contact.png" alt=""></a>
             </li>
             <li class="flex flex-row gap-2">
-                <a href="/plantes/index.php" class="<?php echo ($activePage === 'plantes') ? 'underline' : ''; ?> whitespace-nowrap"><img src="/assets/images/plante.png" alt=""></a>
+                <a href="/plantes/index.php" class="<?php echo ($activePage === 'plantes') ? 'underline' : ''; ?> whitespace-nowrap"><img src="/assets/images/plante.svg" alt=""></a>
             </li>
         </div>
     </menu>
@@ -54,11 +68,11 @@
     <menu id="menu" class="mt-6 mb-4 hidden md:flex flex-col md:flex-row items-center justify-center gap-20">
             <div class="flex flex-col md:flex-row gap-10">
             <li class="flex flex-row gap-2">
-                <img src="/assets/images/plants.png" alt="">
+                <img src="/assets/images/plants.svg" alt="">
                 <a href="/garden" class="<?php echo ($activePage === 'garden') ? 'underline' : ''; ?> whitespace-nowrap">Nos jardins</a>
             </li>
             <li class="flex flex-row gap-2">
-                <img src="/assets/images/admin.png" alt="">
+                <img src="/assets/images/admin.svg" alt="">
                 <a href="/admin/garden/listGarden.php" class="<?php echo ($activePage === 'admin') ? 'underline' : ''; ?> whitespace-nowrap">Administrateur</a>
             </li>
             <li class="flex flex-row gap-2">
@@ -66,7 +80,7 @@
                 <a href="/contact/index.php" class="<?php echo ($activePage === 'contact') ? 'underline' : ''; ?> whitespace-nowrap">Contact</a>
             </li>
             <li class="flex flex-row gap-2">
-                <img src="/assets/images/plante.png" alt="">
+                <img src="/assets/images/plante.svg" alt="">
                 <a href="/plantes/index.php" class="<?php echo ($activePage === 'plantes') ? 'underline' : ''; ?> whitespace-nowrap">Nos plantes</a>
             </li>
         </div>

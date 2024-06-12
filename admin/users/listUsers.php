@@ -12,11 +12,11 @@ $users = findAll("users");
 <div class="px-8">
 
 
-    <div class="flex flex-row gap-8">
-        <a href="../garden/listGarden.php" class="border text-black py-2 px-4 rounded-sm flex justify-center mt-2">Liste des jardins</a>
-        <a href="../plots/listPlot.php" class="border text-black py-2 px-4 rounded-sm flex justify-center mt-2">Liste des parcelles</a>
-        <a href="../users/listUsers.php" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Liste des utilisateurs</a>
-        <a href="../plantations/listPlantations.php" class="border text-black py-2 px-4 rounded-sm flex justify-center mt-2">Liste des plantations</a>
+    <div class="flex flex-col gap-2 md:flex-row ">
+        <a href="../garden/listGarden.php" class="border text-black py-2 px-4 rounded-full flex justify-center mt-2">Liste des jardins</a>
+        <a href="../plots/listPlot.php" class="border text-black py-2 px-4 rounded-full flex justify-center mt-2">Liste des parcelles</a>
+        <a href="../users/listUsers.php" class="bg-main text-white py-2 px-4 rounded-full flex justify-center mt-2">Liste des utilisateurs</a>
+        <a href="../plantations/listPlantations.php" class="border text-black py-2 px-4 rounded-full flex justify-center mt-2">Liste des plantations</a>
     </div>
 
     <h2 class="font-bold text-xl mt-12 mb-8">Liste des parcelles</h2>

@@ -15,10 +15,14 @@ require('../conf/function.inc.php');
     require('./components/sidebar.php');
     ?>
 
-    <div id="dashboard">
+    <div id="dashboard" class="ml-8 w-full">
 
     </div>
 
 </main>
 
 <script src="../assets/js/dashboard.js"></script>
+
+<script>
+    switchMenu("parameters", document.getElementById("parametersButton"));
+</script>

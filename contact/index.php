@@ -8,7 +8,7 @@ require("../conf/header.inc.php");
 <h2 class="font-bold text-2xl text-center underline md:bg-[#93A267]/70 md:py-2 md:w-1/2 md:rounded-xl md:pl-8 md:text-left md:no-underline" style="color: #3E572D">Contact</h2>
 
 <p class="font-bold text-xl text-center py-8">N'hésitez pas à nous envoyer un message</p>
-<div class="flex justify-center">
+<div class="flex justify-center mb-8">
 <form action="../process/mail.proc.php" method="POST" style="border: 2px solid #475C37;" class="w-11/12 px-8 py-6 rounded-lg md:w-2/5">
     <div class="flex flex-col">
         <label for="subject" class="font-bold">Sujet <span class="text-red-600">*</span></label>

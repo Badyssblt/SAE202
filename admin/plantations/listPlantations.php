@@ -12,15 +12,15 @@ $plantations = findAll("plantations");
 <div class="px-8">
 
 
-    <div class="flex flex-row gap-8">
-        <a href="../garden/listGarden.php" class="border text-black py-2 px-4 rounded-sm flex justify-center mt-2">Liste des jardins</a>
-        <a href="../plots/listPlot.php" class="border text-black py-2 px-4 rounded-sm flex justify-center mt-2">Liste des parcelles</a>
-        <a href="../users/listUsers.php" class="border text-black py-2 px-4 rounded-sm flex justify-center mt-2">Liste des utilisateurs</a>
-        <a href="./listPlantations.php" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Liste des plantations</a>
+    <div class="flex flex-col gap-2 md:flex-row">
+        <a href="../garden/listGarden.php" class="border text-black py-2 px-4 rounded-full flex justify-center mt-2">Liste des jardins</a>
+        <a href="../plots/listPlot.php" class="border text-black py-2 px-4 rounded-full flex justify-center mt-2">Liste des parcelles</a>
+        <a href="../users/listUsers.php" class="border text-black py-2 px-4 rounded-full flex justify-center mt-2">Liste des utilisateurs</a>
+        <a href="./listPlantations.php" class="bg-main text-white py-2 px-4 rounded-full flex justify-center mt-2">Liste des plantations</a>
     </div>
 
     <h2 class="font-bold text-xl mt-12 mb-8">Liste des plantations</h2>
-    <button class="bg-black text-white py-2 px-4 rounded-sm flex justify-center my-2" onclick="displayForm()">Créer une parcelle</button>
+    <button class="bg-black text-white py-2 px-4 rounded-sm flex justify-center my-2" onclick="displayForm()">Créer une plantation</button>
     <div class="flex flex-wrap gap-8" id="listing">
 
         <?php
@@ -32,6 +32,9 @@ $plantations = findAll("plantations");
 
         foreach ($plantations as $plantation) { ?>
             <div class="border p-4 rounded-sm w-48">
+                <div>
+                    <img src="../../assets/images/uploads/plants/<?= $plantation['plantation_image'] ?>" alt="">
+                </div>
                 <div>
                     <h2>Nom: <?= $plantation['plantation_nom'] ?></h2>
                 </div>
@@ -56,6 +59,10 @@ $plantations = findAll("plantations");
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
         </button>
+        <div class="flex flex-col mt-2">
+            <label for="parcelle_nom" class="font-bold">Entrer une image</label>
+            <input type="file" name="plantation_image" id="plantation_image" class="border pl-4 py-2" placeholder="Nom de la parcelle">
+        </div>
         <div class="flex flex-col mt-2">
             <label for="parcelle_nom" class="font-bold">Entrer le nom</label>
             <input type="text" name="parcelle_nom" id="parcelle_nom" class="border pl-4 py-2" placeholder="Nom de la parcelle">
@@ -112,21 +119,29 @@ $plantations = findAll("plantations");
 
     async function createPlot(event) {
         event.preventDefault();
-        let name = document.getElementById("parcelle_nom");
+
+        let name = document.getElementById("parcelle_nom").value;
+        let imageInput = document.getElementById("plantation_image");
+        let image = imageInput.files[0]; // Get the first file from the input
+
+        let formData = new FormData();
+        formData.append('name', name);
+        formData.append('image', image);
+
         try {
             const res = await $.ajax({
                 type: "POST",
                 url: "../api/plantations/create/admin.php",
-                data: {
-                    name: name.value
-                },
+                data: formData,
+                processData: false,
+                contentType: false,
                 dataType: "JSON",
                 success: function(response) {
                     fetchPlantations();
                 }
             });
         } catch (error) {
-
+            console.error("Error creating plot:", error);
         }
     }
 
@@ -222,6 +237,9 @@ $plantations = findAll("plantations");
             const div =
                 `
         <div class="border p-4 rounded-sm w-48">
+            <div>
+                    <img src="../../assets/images/uploads/plants/${element['plantation_image']}" alt="">
+            </div>
             <div>  
                 <h2>Nom:  ${element['plantation_nom']}</h2>
             </div>

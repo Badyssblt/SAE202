@@ -17,8 +17,8 @@ $jardins = sql($sql);
 
 <div>
     <ul class="flex flex-row gap-4">
-        <button onclick="showMenu('garden')" class="bg-black text-white rounded-sm py-2 px-4">Mes jardins</button>
-        <button onclick="showMenu('adding')" class="bg-black text-white rounded-sm py-2 px-4">Ajouter un jardin</button>
+        <button onclick="showMenu('listing')" class="border text-black rounded-full py-2 px-4">Mes jardins</button>
+        <button onclick="showMenu('adding')" class="border text-black rounded-full py-2 px-4">Ajouter un jardin</button>
     </ul>
 </div>
 
@@ -29,8 +29,8 @@ $jardins = sql($sql);
 // Liste des jardins
 ?>
 
-<div id="garden" class="flex flex-row-reverse">
-    <div class="flex flex-wrap items-center justify-center mt-4" id="listing">
+<div id="garden" class="flex flex-row">
+    <div class="flex flex-wrap items-center justify-start mt-4" id="listing">
         <?php
         if(count($jardins) <= 0){ ?>
             <p>Vous n'avez aucun jardin</p>
@@ -39,12 +39,12 @@ $jardins = sql($sql);
         }
         foreach ($jardins as $jardin) {
         ?>
-            <div class="border rounded-sm flex flex-col gap-4 w-96">
-                <img src="../assets/images/uploads/garden/<?= $jardin['jardin_image'] ?>" alt="" class="w-full">
-                <h3 class="text-center font-bold"><?= $jardin['jardin_nom'] ?></h3>
+            <div class="border rounded-lg flex flex-col gap-4 w-96 p-4 shadow-md">
+                <img src="../assets/images/uploads/garden/<?= $jardin['jardin_image'] ?>" alt="" class="w-full rounded-lg">
+                <h3 class="text-center font-bold underline"><?= $jardin['jardin_nom'] ?></h3>
                 <div class="flex flex-col p-4 gap-2">
-                    <p>Nombre de parcelle: <span class="font-bold"><?= $jardin['parcelle_count'] ?></span></p>
-                    <h4>Propriétaire: <span class="font-bold"><?= $jardin['user_nom'] ?></span></h4>
+                    <p class="text-center">Nombre de parcelle: <span class="font-bold"><?= $jardin['parcelle_count'] ?></span></p>
+                    <h4 class="text-center">Propriétaire: <span class="font-bold"><?= $jardin['user_nom'] ?></span></h4>
                     <div class="flex flex-wrap gap-4">
                         <button class="border text-black py-2 px-4 rounded-sm" onclick='displayEditForm(<?= json_encode($jardin); ?>)'>Modifier</button>
                         <button onclick="displayVerificationDelete(<?= $jardin['jardin_id'] ?>)" class="bg-red-800 text-white py-2 px-4 rounded-sm">Supprimer</button>
@@ -140,7 +140,7 @@ $jardins = sql($sql);
 ?>
 <div id="deleteVerif" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
     <form method="POST" class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative" id="editGardenForm" action="../process/editGarden.proc.php" enctype="multipart/form-data">
-        <p id="edit_text"></p>
+        <h3 class="font-bold py-2">Voulez-vous supprimer ce jardin ?</h3>
         <button type="button" onclick="displayVerificationDelete()" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
@@ -326,12 +326,12 @@ $jardins = sql($sql);
         }
 
         data.forEach(element => {
-            const div = `<div class="border rounded-sm flex flex-col gap-4 w-96">
-                <img src="../assets/images/uploads/garden/${element['jardin_image']}" alt="" class="w-full">
-                <h3 class='text-center font-bold'>${element['jardin_nom']}</h3>
+            const div = `<div class="border rounded-lg flex flex-col gap-4 w-96 p-4 shadow-md">
+                <img src="../assets/images/uploads/garden/${element['jardin_image']}" alt="" class="w-full rounded-lg">
+                <h3 class='text-center font-bold underline'>${element['jardin_nom']}</h3>
                 <div class='flex flex-col p-4 gap-2'>
-                <p>Nombre de parcelle: <span class="font-bold">${element['parcelle_count']}</span></p>
-                <h4>Propriétaire: <span class="font-bold">${element['user_nom']}</span></h4>
+                <p class="text-center">Nombre de parcelle: <span class="font-bold">${element['parcelle_count']}</span></p>
+                <h4 class="text-center">Propriétaire: <span class="font-bold">${element['user_nom']}</span></h4>
                 <div class="flex flex-wrap gap-4">
                     <button class="border text-black py-2 px-4 rounded-sm" onclick="displayEditForm(${JSON.stringify(element)})">Modifier</button>
                     <button onclick="deleteGarden(${element['jardin_id']})" class="bg-red-800 text-white py-2 px-4 rounded-sm">Supprimer</button>

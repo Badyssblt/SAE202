@@ -14,8 +14,8 @@ $sql = "SELECT Jardin.*, users.user_nom, COUNT(parcelle.parcelle_id) AS parcelle
 $jardins = sql($sql);
 ?>
 
-<div>
-    <h2 class="font-bold text-2xl mb-4 text-center">Nos jardins</h2>
+<div class="mt-10">
+    <h2 class="font-bold text-4xl mb-4 text-left ml-10" style="color: #3E582A;">Nos jardins</h2>
     <div>
         <h3 class="font-bold text-xl p-10">Nos jardins les plus fréquentés</h3>
         <section id="image-carousel" class="splide w-full h-48 md:h-[500px] overflow-hidden" aria-label="Beautiful Images">
@@ -37,7 +37,7 @@ $jardins = sql($sql);
 </div>
 
 <div class="px-8 mb-12">
-    <div class="ml-4 my-4">
+    <div class="ml-4 my-4 md:flex md:flex-row md:items-center">
         <div class="flex flex-row justify-between">
             <p class="font-bold text-lg">Trier par :</p>
             <div class="md:hidden">
@@ -45,15 +45,15 @@ $jardins = sql($sql);
             </div>
         </div>
         
-        <div class="bg-slate-200/30 p-4 rounded-lg flex-col flex gap-4 hidden items-start md:flex-row md:flex" id="sorted">
-            <button onclick="sortBy('name')">Nom</button>
-            <button onclick="sortBy('created')">Date de création</button>
+        <div class="p-4 rounded-lg flex-col flex gap-4 hidden items-start md:flex-row md:flex" id="sorted">
+            <button onclick="sortBy('name')" class="bg-slate-200 px-4 py-2 rounded-full">Nom</button>
+            <button onclick="sortBy('created')" class="bg-slate-200 px-4 py-2 rounded-full">Date de création</button>
         </div>
     </div>
     <div class="flex flex-wrap gap-8" id="listing">
         <?php
         foreach ($jardins as $jardin) { ?>
-            <div class="flex flex-col gap-4 w-96">
+            <div class="flex flex-col gap-4 w-96 border py-4 px-2 shadow-md">
                 <div class="w-full h-64 rounded-xl overflow-hidden">
                     <img src="../assets/images/uploads/garden/<?= $jardin['jardin_image'] ?>" alt="" class="w-full h-full object-cover">
                 </div>
@@ -62,7 +62,7 @@ $jardins = sql($sql);
                 <p class="font-bold text-center ">Nombre de parcelle: <span class="font-bold"><?= $jardin['parcelle_count'] ?></span></p>
 
                 <div>
-                    <a href="./single.php?id=<?= $jardin['jardin_id'] ?>" class="bg-black text-white py-2 px-4 mx-4 rounded-sm flex justify-center mt-2">Voir plus</a>
+                    <a href="./single.php?id=<?= $jardin['jardin_id'] ?>" class="bg-main font-bold text-lg text-white py-2 px-4 mx-4 rounded-sm flex justify-center mt-2">Voir plus</a>
                 </div>
             </div>
 
