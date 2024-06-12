@@ -1,5 +1,6 @@
 <?php
 // BACKEND
+ob_start();
 require('../conf/header.inc.php');
 require('../conf/function.inc.php');
 
@@ -30,8 +31,10 @@ $query_jardin->bindParam(':id', $_GET['id']);
 $query_jardin->execute();
 $jardin = $query_jardin->fetch(PDO::FETCH_ASSOC);
 
+
 if(!$jardin){
     header('Location: /');
+    exit();
 }
 
 // Vérifie si l'utilisateur connecté est le propriétaire du jardin

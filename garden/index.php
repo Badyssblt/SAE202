@@ -123,7 +123,7 @@ $jardins = sql($sql);
         data.forEach(element => {
             const div = 
             `
-            <div class="flex flex-col gap-4 w-96">
+            <div class="flex flex-col gap-4 w-96 border py-4 px-2 shadow-md">
                 <div class="w-full h-64 rounded-xl overflow-hidden">
                     <img src="../assets/images/uploads/garden/${element['jardin_image']}" alt="" class="w-full h-full object-cover">
                 </div>
@@ -132,7 +132,7 @@ $jardins = sql($sql);
                 <p class="font-bold text-center ">Nombre de parcelle: <span class="font-bold">${element['parcelle_count']}</span></p>
 
                 <div>
-                    <a href="./single.php?id=${element['jardin_id']}" class="bg-black text-white py-2 px-4 mx-4 rounded-sm flex justify-center mt-2">Voir plus</a>
+                    <a href="./single.php?id=${element['jardin_id']}" class="bg-main font-bold text-lg text-white py-2 px-4 mx-4 rounded-sm flex justify-center mt-2">Voir plus</a>
                 </div>
             </div>
             `;
