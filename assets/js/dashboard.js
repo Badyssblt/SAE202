@@ -10,6 +10,7 @@ function switchMenu(name, element)
         $("#dashboard").load('/user/components/parameters.php');
     }else if(name === "garden"){
         element.classList.add("bg-second");
+        document.getElementById("reservationButton").classList.remove("bg-second");
         document.getElementById("parametersButton").classList.remove("bg-second");
         document.getElementById("plotButton").classList.remove("bg-second");
         $("#dashboard").empty();
@@ -18,6 +19,7 @@ function switchMenu(name, element)
         element.classList.add("bg-second");
         document.getElementById("parametersButton").classList.remove("bg-second");
         document.getElementById("gardenButton").classList.remove("bg-second");
+        document.getElementById("reservationButton").classList.remove("bg-second");
         $("#dashboard").empty();
         $("#dashboard").load('/user/components/plot.php');
     }else if(name === "reservations")

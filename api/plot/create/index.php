@@ -17,11 +17,12 @@ if(isset($_SESSION['id'])){
     $userID = $_SESSION['id'];
 }
 
-$sql = "INSERT INTO parcelle (jardin_id, parcelle_nom, isAccepted) VALUES (:id, :name, false)";
+$sql = "INSERT INTO parcelle (jardin_id, parcelle_nom, isAccepted, parcelle_superficie) VALUES (:id, :name, false, :superficie)";
 $db = getConnection();
 $query = $db->prepare($sql);
 $query->bindParam(':id', $_POST['id']);
 $query->bindParam(':name', $_POST['name']);
+$query->bindParam(':superficie', $_POST['superficie']);
 $res = $query->execute();
 
 

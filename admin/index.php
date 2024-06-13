@@ -86,3 +86,7 @@ $plantes = sql($sql);
         </div>
     </div>
 </div>
+
+<?php
+require('../conf/footer.inc.php');
+?>

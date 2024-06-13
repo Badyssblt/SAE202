@@ -12,12 +12,13 @@ require('../../../../conf/function.inc.php');
 $status = $_POST['status'];
 
 
-$sql = "UPDATE parcelle SET jardin_id = :jardin_id, user_id = :userID, plantation_id = :type, isAccepted = :isAccepted, parcelle_nom = :nom WHERE parcelle_id = :id";
+$sql = "UPDATE parcelle SET jardin_id = :jardin_id, user_id = :userID, plantation_id = :type, isAccepted = :isAccepted, parcelle_nom = :nom, parcelle_superficie = :superficie WHERE parcelle_id = :id";
 $db = getConnection();
 $query = $db->prepare($sql);
 
 $query->bindParam(':jardin_id', $_POST['jardin']);
 $query->bindParam(':userID', $_POST['user']);
+$query->bindParam(':superficie', $_POST['superficie']);
 $query->bindParam(':type', $_POST['type']);
 $query->bindParam(':nom', $_POST['name']);
 $query->bindParam(':id', $_POST['id']); 

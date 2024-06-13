@@ -5,7 +5,7 @@ require("../conf/header.inc.php");
 
 ?>
 
-<h2 class="font-bold text-2xl text-center underline md:bg-[#93A267]/70 md:py-2 md:w-1/2 md:rounded-xl md:pl-8 md:text-left md:no-underline" style="color: #3E572D">Contact</h2>
+<h2 class="font-bold text-2xl text-center underline md:py-2 md:text-3xl md:rounded-xl md:text-center md:no-underline" style="color: #3E572D">Contact</h2>
 
 <p class="font-bold text-xl text-center py-8">N'hésitez pas à nous envoyer un message</p>
 <div class="flex justify-center mb-8">

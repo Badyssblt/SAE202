@@ -25,3 +25,6 @@ $plantes = findAll("plantations");
         ?>
 
     </div>
+    <?php
+require('../conf/footer.inc.php');
+?>

@@ -20,7 +20,7 @@ $plantations = findAll("plantations");
     </div>
 
     <h2 class="font-bold text-xl mt-12 mb-8">Liste des plantations</h2>
-    <button class="bg-black text-white py-2 px-4 rounded-sm flex justify-center my-2" onclick="displayForm()">Créer une plantation</button>
+    <button class="bg-main text-white py-2 px-4 rounded-sm flex justify-center my-2" onclick="displayForm()">Créer une plantation</button>
     <div class="flex flex-wrap gap-8" id="listing">
 
         <?php
@@ -95,6 +95,10 @@ $plantations = findAll("plantations");
 </div>
 <?php
 // Fin Formulaire d'édition de parcelle
+?>
+
+<?php
+require('../../conf/footer.inc.php');
 ?>
 
 

@@ -21,6 +21,10 @@ require('../conf/function.inc.php');
 
 </main>
 
+<?php
+require('../conf/footer.inc.php');
+?>
+
 <script src="../assets/js/dashboard.js"></script>
 
 <script>

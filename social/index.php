@@ -66,8 +66,8 @@ function formatTimeAgo($timestamp)
 
 ?>
 
-<div>
-    <button onclick="displayCreateForm()">Créer une publication</button>
+<div class="flex justify-center my-8">
+    <button onclick="displayCreateForm()" class="bg-main text-white px-4 py-2 rounded-full">Créer une publication</button>
 </div>
 <div class="flex flex-col items-center gap-16">
     <?php
@@ -234,6 +234,10 @@ function formatTimeAgo($timestamp)
 </div>
 <?php
 // Fin créer une publication
+?>
+
+<?php
+require('../conf/footer.inc.php');
 ?>
 
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>

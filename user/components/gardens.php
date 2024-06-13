@@ -171,6 +171,10 @@ $jardins = sql($sql);
             <label for="plantation" class="font-bold">Entrer le nom</label>
             <input type="text" name="plantation_type" id="plantation" class="border pl-4 py-2" placeholder="Nom de la parcelle">
         </div>
+        <div class="flex flex-col mt-2">
+            <label for="plantation" class="font-bold">Entrer la superficie</label>
+            <input type="text" name="parcelle_superficie" id="parcelle_superficie" class="border pl-4 py-2" placeholder="Nom de la parcelle">
+        </div>
         <div>
 
         </div>
@@ -272,6 +276,7 @@ $jardins = sql($sql);
     async function addPlot(event) {
         event.preventDefault();
         const typeDiv = document.getElementById("plantation");
+        const superficie = document.getElementById("parcelle_superficie");
         const jardinID = (document.getElementById("jardin_id")).value;
 
         console.log(typeDiv);
@@ -281,7 +286,8 @@ $jardins = sql($sql);
                 url: "../../api/plot/create/index.php",
                 data: {
                     id: jardinID,
-                    name: typeDiv.value
+                    name: typeDiv.value,
+                    superficie: superficie.value
                 },
                 dataType: "JSON",
                 success: function(response) {

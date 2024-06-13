@@ -21,24 +21,27 @@ $users = findAll("users");
 </div>
 
 <h2 class="font-bold text-xl mt-12 mb-8">Liste des jardins</h2>
-<button class="bg-black text-white py-2 px-4 rounded-sm flex justify-center my-2" onclick="displayAddGardenForm()">Créer un jardin</button>
+<button class="bg-main text-white py-2 px-4 rounded-sm flex justify-center my-2" onclick="displayAddGardenForm()">Créer un jardin</button>
 <div class="flex flex-wrap gap-2" id="listing">
     <?php
         foreach($jardins as $jardin){ ?>
-            <div class="border rounded-sm flex flex-col gap-4 w-96">
-                <img src="../../assets/images/uploads/garden/<?= $jardin['jardin_image'] ?>" alt="" class="w-full">
-                <h3><?= $jardin['jardin_nom'] ?></h3>
-                <p>Nombre de parcelle: <span class="font-bold"><?= $jardin['parcelle_count'] ?></span></p>
-                <h4>Propriétaire: <span class="font-bold"><?= $jardin['user_nom'] ?></span></h4>
-                <div class="flex flex-row gap-4">
+             <div class="flex flex-col gap-4 w-96 border py-4 px-2 shadow-md">
+                <div class="w-full h-64 rounded-xl overflow-hidden">
+                    <img src="../../assets/images/uploads/garden/<?= $jardin['jardin_image'] ?>" alt="" class="w-full h-full object-cover">
+                </div>
+                <h3 class="font-bold text-center text-xl underline"><?= $jardin['jardin_nom'] ?></h3>
+                <h4 class="font-bold text-center flex items-center justify-center"><img class="w-8 mr-4" src="../../assets/images/uploads/users/user.png" alt="">Propriétaire: <span class="font-bold"><?=  $jardin['user_nom'] ?></span></h4>
+                <p class="font-bold text-center ">Nombre de parcelle: <span class="font-bold"><?= $jardin['parcelle_count'] ?></span></p>
+
+                <div class="flex flex-row gap-4 px-4">
                     <button class="border text-black py-2 px-4 rounded-sm flex justify-center mt-4" onclick='displayEditGardenForm(<?= json_encode($jardin) ?>)'>Modifier</button>
                     <button onclick="deleteGarden(<?= $jardin['jardin_id'] ?>)" class="bg-red-800 text-white py-2 px-4 rounded-sm flex justify-center mt-4">Supprimer</button>
                 </div>
-                <a href="/garden/single.php?id=<?= $jardin['jardin_id'] ?>" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Voir plus</a>
+                <a href="/garden/single.php?id=<?= $jardin['jardin_id'] ?>" class="bg-main font-bold text-lg text-white py-2 px-4 mx-4 rounded-sm flex justify-center mt-2">Voir plus</a>
             </div>
         <?php
         }
-
+        
     ?>
     
 </div>
@@ -170,6 +173,9 @@ $users = findAll("users");
 // Fin Formulaire d'edition d'un jardin
 ?>
 
+<?php
+require('../../conf/footer.inc.php');
+?>
 
 <script>
 

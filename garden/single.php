@@ -55,6 +55,7 @@ $sql_parcelles = "SELECT
                     parcelle.parcelle_nom,
                     users.user_nom AS parcelle_user,
                     parcelle.isAccepted,
+                    parcelle.parcelle_superficie,
                     plantations.plantation_nom
                 FROM 
                     parcelle 
@@ -114,6 +115,7 @@ if ($jardin) {
                             if($isAvailable && !$isWaiting){  ?>
                             <p class="font-bold"><?= $parcelle['parcelle_nom'] ?></p>                      
                             <button onclick="updatePlot(<?= $parcelle['parcelle_id'] ?>)" class="bg-black text-white py-2 px-4 rounded-sm mt-2 inline-block">Réserver</button>
+                            <p>Superficie: <span class="font-bold"><?= $parcelle['parcelle_superficie'] ?> </p>
                             <?php
                                 if($parcelle['plantation_nom'] !== null){ ?>
                                 <p>Type : <span class="font-bold"><?= $parcelle['plantation_nom'] ?></span></p>
@@ -124,6 +126,7 @@ if ($jardin) {
                             }elseif($isWaiting){ ?>
                             <p class="font-bold"><?= $parcelle['parcelle_nom'] ?></p> 
                             <button class="bg-black text-white py-2 px-4 rounded-sm mt-2 inline-block">Réservation en cours</button>
+                            <p>Superficie: <span class="font-bold"><?= $parcelle['parcelle_superficie'] ?> </p>
                             <?php
                                 if($parcelle['plantation_nom'] !== null){ ?>
                                 <p>Type : <span class="font-bold"><?= $parcelle['plantation_nom'] ?></span></p>
@@ -132,6 +135,7 @@ if ($jardin) {
                                 }
                             }else { ?>
                             <p>Propriétaire : <span class="font-bold"><?= $parcelle['parcelle_user'] ?></span></p>
+                            <p>Superficie: <span class="font-bold"><?= $parcelle['parcelle_superficie'] ?> </p>
                             <?php
                                 if($parcelle['plantation_nom'] !== null){ ?>
                                 <p>Type : <span class="font-bold"><?= $parcelle['plantation_nom'] ?></span></p>
@@ -281,18 +285,20 @@ if ($jardin) {
             plotDetails = `
                 <p class="font-bold">${element['parcelle_nom']}</p>
                 <button onclick="updatePlot(${element['parcelle_id']})" class="bg-black text-white py-2 px-4 rounded-sm mt-2 inline-block">Réserver</button>
+                <p>Superficie: <span class="font-bold">${element['parcelle_superficie']} </p>
                 ${type}
             `;
         } else if(isAvailable && isWaiting){
             plotDetails = `
                 <p class="font-bold">${element['parcelle_nom']}</p>
                 <a href="#" class="bg-black text-white py-2 px-4 rounded-sm mt-2 inline-block">Réservation en cours</a>
+                ${element['parcelle_superficie']}
                 ${type}
             `;
         }else if(!isAvailable && !isWaiting){
             plotDetails = `
                 <p>Propriétaire : <span class="font-bold">${element['parcelle_user']}</span></p>
-                
+                ${element['parcelle_superficie']}
                 ${type}
             `;
         }

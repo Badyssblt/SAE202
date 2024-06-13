@@ -11,6 +11,7 @@ $sql = "SELECT
 parcelle.parcelle_id,
 parcelle.jardin_id,
 parcelle.user_id,
+parcelle.parcelle_superficie,
 parcelle.isAccepted,
 parcelle.parcelle_nom,
 users.user_nom,
@@ -49,7 +50,7 @@ $plantations = findAll("plantations");
 </div>
 
 <h2 class="font-bold text-xl mt-12 mb-8">Liste des parcelles</h2>
-<button class="bg-black text-white py-2 px-4 rounded-sm flex justify-center my-2" onclick="displayForm()">Créer une parcelle</button>
+<button class="bg-main text-white py-2 px-4 rounded-sm flex justify-center my-2" onclick="displayForm()">Créer une parcelle</button>
 <div class="flex flex-wrap gap-8" id="listing">
     
     <?php
@@ -85,7 +86,7 @@ $plantations = findAll("plantations");
                     }
                 ?>
             </div>
-            <a href="../../garden/single.php?id=<?= $parcelle['jardin_id'] ?>" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Voir plus</a>
+            <a href="../../garden/single.php?id=<?= $parcelle['jardin_id'] ?>" class="bg-main text-white py-2 px-4 rounded-sm flex justify-center mt-2">Voir plus</a>
             <a href="../process/plot/delete.proc.php?id=<?= $parcelle['parcelle_id'] ?>" class="bg-red-800 text-white py-2 px-4 rounded-sm flex justify-center mt-4">Supprimer</a>
             <button class="border text-black w-full py-2 px-4 rounded-sm flex justify-center mt-2" onclick='displayEditForm(<?= json_encode($parcelle) ?>)'>Modifier</button>
         </div>
@@ -110,6 +111,10 @@ $plantations = findAll("plantations");
             <div class="flex flex-col mt-2">
                 <label for="parcelle_nom" class="font-bold">Entrer le nom</label>
                 <input type="text" name="parcelle_nom" id="parcelle_nom" class="border pl-4 py-2" placeholder="Nom de la parcelle">
+            </div>
+            <div class="flex flex-col mt-2">
+                <label for="parcelle_superficie" class="font-bold">Entrer la superficie</label>
+                <input type="text" name="parcelle_superficie" id="parcelle_superficie" class="border pl-4 py-2" placeholder="Nom de la parcelle">
             </div>
             <div class="flex flex-col mt-2">
                 <label for="jardin" class="font-bold">Sélectionner le jardin</label>
@@ -154,7 +159,9 @@ $plantations = findAll("plantations");
 // Fin Formulaire d'ajout de parcelle
 ?>
 
-
+<?php
+require('../../conf/footer.inc.php');
+?>
 
 <?php
 // Formulaire d'édition de parcelle
@@ -169,6 +176,10 @@ $plantations = findAll("plantations");
             <div class="flex flex-col mt-2">
                 <label for="edit_parcelle_nom" class="font-bold">Entrer le nom</label>
                 <input type="text" name="edit_parcelle_nom" id="edit_parcelle_nom" class="border pl-4 py-2" placeholder="Nom de la parcelle">
+            </div>
+            <div class="flex flex-col mt-2">
+                <label for="parcelle_superficie" class="font-bold">Entrer la superficie</label>
+                <input type="text" name="edit_superficie" id="edit_superficie" class="border pl-4 py-2" placeholder="Nom de la parcelle">
             </div>
             <div class="flex flex-col mt-2">
                 <label for="edit_jardin" class="font-bold">Sélectionner le jardin</label>
@@ -225,6 +236,8 @@ $plantations = findAll("plantations");
 ?>
 
 
+
+
 <script>
 
         const plotForm = document.getElementById("plotForm");
@@ -255,15 +268,17 @@ $plantations = findAll("plantations");
         let jardin = (document.getElementById("jardin"));
         let user = (document.getElementById("users"));
         let type = (document.getElementById("parcelle_type"));
+        let superficie = (document.getElementById("parcelle_superficie"))
         try {
             const res = await $.ajax({
                 type: "POST",
-                url: "../../api/plot/create/admin.php",
+                url: "../api/plot/create/admin.php",
                 data: {
                     name: name.value,
                     jardin: jardin.value,
                     user: user.value,
-                    type: type.value
+                    type: type.value,
+                    superficie: superficie.value
                 },
                 dataType: "JSON",
                 success: function (response) {
@@ -281,6 +296,7 @@ $plantations = findAll("plantations");
 
         document.getElementById("edit_parcelle_nom").value = parcelle.parcelle_nom || '';
         document.getElementById("edit_jardin").value = parcelle.jardin_id || '';
+        document.getElementById("edit_superficie").value = parcelle.parcelle_superficie || '';
         setSelectOption('edit_users', parcelle.user_id);
         setSelectOption('edit_parcelle_type', parcelle.plantation_id);
         form.dataset.parcelleId = parcelle.parcelle_id;
@@ -310,6 +326,7 @@ $plantations = findAll("plantations");
         let user = (document.getElementById("edit_users"));
         let type = (document.getElementById("edit_parcelle_type"));
         let status = document.getElementById("edit_status");
+        let superficie = document.getElementById("edit_superficie");
         let jardinID = document.getElementById("editPlotForm").dataset.parcelleId;
 
         $.ajax({
@@ -321,6 +338,7 @@ $plantations = findAll("plantations");
                 user: user.value,
                 type: type.value,
                 status: status.value,
+                superficie: superficie.value,
                 id: jardinID
             },
             dataType: "JSON",
@@ -408,7 +426,7 @@ $plantations = findAll("plantations");
                     <h3 class="font-bold">Status</h3>
                     ${plotDetails}
                 </div>
-                <a href="../../garden/single.php?id=${element.jardin_id}" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Voir plus</a>
+                <a href="../../garden/single.php?id=${element.jardin_id}" class="bg-main text-white py-2 px-4 rounded-sm flex justify-center mt-2">Voir plus</a>
                 <a href="../process/plot/delete.proc.php?id=${element.parcelle_id}" class="bg-red-800 text-white py-2 px-4 rounded-sm flex justify-center mt-4">Supprimer</a>
                 <button class="border text-black w-full py-2 px-4 rounded-sm flex justify-center mt-2" onclick='displayEditForm(${JSON.stringify(element)})'>Modifier</button>
             </div>
