@@ -25,6 +25,18 @@ require("../conf/header.inc.php");
     <div class="flex justify-center">
         <button type="submit" class="bg-main px-4 py-2 rounded-full font-bold text-white mt-4">Envoyer un mail</button>
     </div>
+    <p class="text-lime-600 font-bold text-center my-4"><?php
+    if (isset($_SESSION['success']['message'])) {
+        echo $_SESSION['success']['message'];
+        unset($_SESSION['success']['message']);
+    }
+    ?></p>
+    <p class="text-red-600 font-bold text-center my-4"><?php
+    if (isset($_SESSION['error']['message'])) {
+        echo $_SESSION['error']['message'];
+        unset($_SESSION['error']['message']);
+    }
+    ?></p>
 </form>
 </div>
 

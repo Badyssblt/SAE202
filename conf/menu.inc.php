@@ -54,7 +54,7 @@
                 <a href="/garden" class="<?php echo ($activePage === 'garden') ? 'underline' : ''; ?> whitespace-nowrap"><img src="/assets/images/plants.svg"  alt=""></a>
             </li>
             <li class="flex flex-row gap-2">
-                <a href="/admin/garden/listGarden.php" class="<?php echo ($activePage === 'admin') ? 'underline' : ''; ?> whitespace-nowrap"><img src="/assets/images/admin.png" alt=""></a>
+                <a href="/gestion" class="<?php echo ($activePage === 'admin') ? 'underline' : ''; ?> whitespace-nowrap"><img src="/assets/images/admin.png" alt=""></a>
             </li>
             <li class="flex flex-row gap-2">
                 <a href="/contact/index.php" class="<?php echo ($activePage === 'contact') ? 'underline' : ''; ?> whitespace-nowrap"><img src="/assets/images/contact.png" alt=""></a>
@@ -73,15 +73,15 @@
             </li>
             <li class="flex flex-row gap-2">
                 <img src="/assets/images/admin.svg" alt="">
-                <a href="/admin/garden/listGarden.php" class="<?php echo ($activePage === 'admin') ? 'underline' : ''; ?> whitespace-nowrap">Administrateur</a>
+                <a href="/gestion" class="<?php echo ($activePage === 'admin') ? 'underline' : ''; ?> whitespace-nowrap">Administrateur</a>
             </li>
             <li class="flex flex-row gap-2">
-                <img src="/assets/images/admin.png" alt="">
+                <img src="/assets/images/contact.png" alt="">
                 <a href="/contact/index.php" class="<?php echo ($activePage === 'contact') ? 'underline' : ''; ?> whitespace-nowrap">Contact</a>
             </li>
             <li class="flex flex-row gap-2">
                 <img src="/assets/images/plante.svg" alt="">
-                <a href="/plantes/index.php" class="<?php echo ($activePage === 'plantes') ? 'underline' : ''; ?> whitespace-nowrap">Nos plantes</a>
+                <a href="/plants/index.php" class="<?php echo ($activePage === 'plantes') ? 'underline' : ''; ?> whitespace-nowrap">Nos plantes</a>
             </li>
         </div>
 
@@ -115,11 +115,3 @@
 </header>
 
 <body>
-    <script>
-        document.getElementById('menu-button').addEventListener('click', function() {
-            var menu = document.getElementById('menu');
-            const connect = document.getElementById('connect');
-            menu.classList.toggle('hidden');
-            connect.classList.toggle('hidden');
-        });
-    </script>

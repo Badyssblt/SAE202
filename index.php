@@ -4,14 +4,17 @@ require('conf/header.inc.php');
 
 ?>
 <main class="md:h-96">
-    <div class="bg-no-repeat bg-cover h-72 image-mobile md:h-full">
-        <div class="flex items-center justify-center h-full">
+    <div class="bg-no-repeat bg-cover md:h-full md:h-72">
+        <div class="flex items-center justify-center h-full px-10 flex-col  md:flex-row">
+            <div>
+                <img src="/assets/images/cojardinage.png" alt="" >
+            </div>
             <div class="text-center w-4/6 py-2 px-4">
-                <h2 class="text-4xl font-bold text-center text-white">Planta</h2>
-                <p class="text-sm mt-4 text-center text-white">Planta conserve l'humanisme qui la caractérise depuis sa création et est la référence française des jardins familiaux</p>
+                <h2 class="font-bold text-center text-7xl" style="color: #93A267">Planta</h2>
+                <p class="text-lg mt-4 text-center text-black">Découvrez une plateforme de co-jardinage vous permettant de partagez<br> vos jardins ou cultivez dans des jardins d’autres utilisateurs </p>
                 <div class="flex justify-center gap-4">
-                    <a href="#" style="border-color: #93A267;" class="border border-2 px-2 py-2 rounded-lg font-bold flex justify-center w-28 mt-4 text-white">Découvrir</a>
-                    <a href="#" class="bg-lime-800	 px-2 py-2 rounded-lg font-bold flex justify-center w-28 mt-4 text-white">Découvrir</a>
+                <a href="/user/signup.php" class="bg-lime-800	 px-2 py-2 rounded-lg font-bold flex justify-center w-28 mt-4 text-white">S'inscrire</a>
+                    <a href="/garden/index.php" style="border-color: #93A267;" class="border border-2 px-2 py-2 rounded-lg font-bold flex justify-center w-28 mt-4 text-black">Découvrir</a>
                 </div>
             </div>
         </div>

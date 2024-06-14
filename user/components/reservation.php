@@ -48,7 +48,7 @@ $plantations = findAll("plantations");
     <?php
 
     if(count($parcelles) <= 0){ ?>
-        <p class="mt-8">Vous n'avez aucune parcelle...</p>
+        <p class="mt-8">Vous n'avez aucune réservation...</p>
 <?php
     }
 

@@ -50,6 +50,7 @@ if(isset($_SESSION['id']) && $jardin['jardin_user_id'] == $_SESSION['id']){
 
 
 
+
 $sql_parcelles = "SELECT 
                     parcelle.parcelle_id, 
                     parcelle.parcelle_nom,
@@ -88,10 +89,17 @@ if ($jardin) {
 ?>
 
 
-<div class="w-full flex flex-row px-8 gap-4">
-    <div class="w-1/2">
-        <img src="../assets/images/uploads/garden/<?= $jardin['jardin_image'] ?>" alt="" class="w-full">
+<div class="w-full flex flex-col md:flex-row px-8 gap-4 my-8">
+    <div>
+        <div class="w-full md:w-full">
+            <img src="../assets/images/uploads/garden/<?= $jardin['jardin_image'] ?>" alt="" class="w-full">
+        </div>
+        <div class="border flex flex-col items-center py-4 md:w-full mt-2 rounded-md">
+            <p>Propriétaire: <span class="font-bold"><?= $jardin['jardin_user'] ?></span></p>
+            <p>Nombre de parcelle: <span class="font-bold"><?= count($parcelles) ?></span></p>
+        </div>
     </div>
+
     <div class="w-1/2">
         <h2 class="font-bold text-2xl text-center"><?= $jardin['jardin_nom'] ?></h2>
         <div class="p-8">
@@ -102,7 +110,7 @@ if ($jardin) {
                         $isAvailable = $parcelle['isAccepted'] == 1 ? false : true;  
                         $isWaiting = ($isAvailable && $parcelle['parcelle_user'] != null) ? true : false;
                         ?>
-                        <div class="w-56 relative">
+                        <div class="relative border px-4 py-2 rounded-lg">
                         <?php
                         if($owner){ ?>
                         <button onclick="deletePlot(<?= $parcelle['parcelle_id'] ?>)" class="absolute top-0 right-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -114,7 +122,7 @@ if ($jardin) {
                     
                             if($isAvailable && !$isWaiting){  ?>
                             <p class="font-bold"><?= $parcelle['parcelle_nom'] ?></p>                      
-                            <button onclick="updatePlot(<?= $parcelle['parcelle_id'] ?>)" class="bg-black text-white py-2 px-4 rounded-sm mt-2 inline-block">Réserver</button>
+                            <button onclick="updatePlot(<?= $parcelle['parcelle_id'] ?>)" class="bg-main text-white py-2 px-4 rounded-sm mt-2 inline-block">Réserver</button>
                             <p>Superficie: <span class="font-bold"><?= $parcelle['parcelle_superficie'] ?> </p>
                             <?php
                                 if($parcelle['plantation_nom'] !== null){ ?>
@@ -125,7 +133,7 @@ if ($jardin) {
                             <?php
                             }elseif($isWaiting){ ?>
                             <p class="font-bold"><?= $parcelle['parcelle_nom'] ?></p> 
-                            <button class="bg-black text-white py-2 px-4 rounded-sm mt-2 inline-block">Réservation en cours</button>
+                            <button class="bg-main text-white py-2 px-4 rounded-sm mt-2 inline-block">Réservation en cours</button>
                             <p>Superficie: <span class="font-bold"><?= $parcelle['parcelle_superficie'] ?> </p>
                             <?php
                                 if($parcelle['plantation_nom'] !== null){ ?>
@@ -203,6 +211,10 @@ if ($jardin) {
         </div>
     </div>
 </div>
+
+<?php
+require('../conf/footer.inc.php');
+?>
 
 <script>
 
@@ -284,14 +296,14 @@ if ($jardin) {
         if (isAvailable && !isWaiting) {
             plotDetails = `
                 <p class="font-bold">${element['parcelle_nom']}</p>
-                <button onclick="updatePlot(${element['parcelle_id']})" class="bg-black text-white py-2 px-4 rounded-sm mt-2 inline-block">Réserver</button>
+                <button onclick="updatePlot(${element['parcelle_id']})" class="bg-main text-white py-2 px-4 rounded-sm mt-2 inline-block">Réserver</button>
                 <p>Superficie: <span class="font-bold">${element['parcelle_superficie']} </p>
                 ${type}
             `;
         } else if(isAvailable && isWaiting){
             plotDetails = `
                 <p class="font-bold">${element['parcelle_nom']}</p>
-                <a href="#" class="bg-black text-white py-2 px-4 rounded-sm mt-2 inline-block">Réservation en cours</a>
+                <a href="#" class="bg-main text-white py-2 px-4 rounded-sm mt-2 inline-block">Réservation en cours</a>
                 ${element['parcelle_superficie']}
                 ${type}
             `;
@@ -304,7 +316,7 @@ if ($jardin) {
         }
 
         const div = `
-            <div class="w-56 relative">
+            <div class="relative border px-4 py-2 rounded-lg">
                 ${closeButton}
                 ${plotDetails}
             </div>

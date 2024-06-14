@@ -71,7 +71,9 @@ function formatTimeAgo($timestamp)
 </div>
 <div class="flex flex-col items-center gap-16">
     <?php
-
+        if(empty($posts)){ ?>
+            <p>Aucune publication...</p>
+        <?php }
     foreach ($posts as $post) {
         if (isset($_SESSION) && isset($_SESSION['id'])) {
             $likedArray = explode(',', $post['liked_user_ids']);
@@ -212,7 +214,7 @@ function formatTimeAgo($timestamp)
 <?php
 // Créer une publication
 ?>
-<div id="createPost" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center" style="background-color: rgba(0, 0, 0, 0.3);">
+<div id="createPost" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-600 w-screen h-full flex justify-center items-center z-50" style="background-color: rgba(0, 0, 0, 0.3);">
     <form onsubmit="createPost(event);" class="flex justify-center flex-col bg-white py-8 px-10 rounded-sm relative" id="editForm" action="#" method="POST" enctype="multipart/form-data">
         <p class="font-bold text-xl">Créer une publication</p>
         <input type="file" name="image" id="imagePost">

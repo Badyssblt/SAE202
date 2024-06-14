@@ -87,15 +87,18 @@ $jardins = sql($sql);
 
         <input type="file" name="image" id="image">
         <button type="submit" class="bg-black text-white rounded-md py-2">Créer</button>
-        <?php
-        if (isset($_SESSION['error']['message'])) { ?>
-            <p class="text-red-800"><?= $_SESSION['error']['message'] ?></p>
-        <?php
-        } elseif (isset($_SESSION['success']['message'])) { ?>
-            <p class="text-red-800"><?= $_SESSION['success']['message'] ?></p>
-        <?php
-        }
-        ?>
+        <p class="text-lime-600 font-bold text-center my-4"><?php
+    if (isset($_SESSION['success']['message'])) {
+        echo $_SESSION['success']['message'];
+        unset($_SESSION['success']['message']);
+    }
+    ?></p>
+    <p class="text-red-600 font-bold text-center my-4"><?php
+    if (isset($_SESSION['error']['message'])) {
+        echo $_SESSION['error']['message'];
+        unset($_SESSION['error']['message']);
+    }
+    ?></p>
     </form>
 </div>
 
@@ -340,7 +343,7 @@ $jardins = sql($sql);
                 <h4 class="text-center">Propriétaire: <span class="font-bold">${element['user_nom']}</span></h4>
                 <div class="flex flex-wrap gap-4">
                     <button class="border text-black py-2 px-4 rounded-sm" onclick="displayEditForm(${JSON.stringify(element)})">Modifier</button>
-                    <button onclick="deleteGarden(${element['jardin_id']})" class="bg-red-800 text-white py-2 px-4 rounded-sm">Supprimer</button>
+                    <button onclick="deleteGarden(event)" class="bg-red-800 text-white py-2 px-4 rounded-sm">Supprimer</button>
                     <button onclick="displayForm('${element['jardin_nom']}', ${element['jardin_id']})" class="bg-lime-800 text-white py-2 px-4 rounded-sm">Ajouter une parcelle</button>
                     <a href="../../garden/single.php?id=${element['jardin_id']}" class="bg-black text-white py-2 px-4 rounded-sm">Voir plus</a>
                 </div>
