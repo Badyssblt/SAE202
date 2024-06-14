@@ -1,6 +1,6 @@
 <?php
 $activePage = 'admin';
-
+$title = "Plantes";
 require("../../conf/header.inc.php");
 require('../../conf/function.inc.php');
 

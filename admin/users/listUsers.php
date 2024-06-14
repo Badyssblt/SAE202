@@ -1,6 +1,8 @@
 <?php
 
 $activePage = 'admin';
+$title = "Utilisateurs";
+
 require("../../conf/header.inc.php");
 require('../../conf/function.inc.php');
 

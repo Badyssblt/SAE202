@@ -1,5 +1,5 @@
 <?php
-
+$title = "Réseau social";
 require('../../conf/header.inc.php');
 require("../../conf/function.inc.php");
 

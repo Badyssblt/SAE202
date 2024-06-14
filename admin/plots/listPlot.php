@@ -2,6 +2,7 @@
 
 <?php
 $activePage = 'admin';
+$title = "Parcelles";
 
 require("../../conf/header.inc.php");
 require('../../conf/function.inc.php');
