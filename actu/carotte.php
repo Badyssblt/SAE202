@@ -6,7 +6,7 @@ require('../conf/header.inc.php');
 
 
 <div class="px-10 flex flex-col items-center min-h-screen">
-    <h2 class="font-bold text-xl">Comment planter des carottes ?</h2>
+    <h2 class="font-bold text-xl bg-main text-white px-4 py-2 rounded-lg mt-8">Comment planter des carottes ?</h2>
     <p class="w-1/2 mt-4">Semez les carottes sur un sol léger dans une terre ameublie en profondeur et enrichie en humus. Les périodes sont de février à juillet selon les variétés de janvier à mars pour les variétés précoces, de mars à avril pour les variétés de saison.
 
 L’espace pour les semis dans un sillon de 1 cm de profondeur et laissez quelques centimètres entre chaque carotte.

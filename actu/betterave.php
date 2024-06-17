@@ -6,7 +6,7 @@ require('../conf/header.inc.php');
 
 
 <div class="px-10 flex flex-col items-center min-h-screen">
-    <h2 class="font-bold text-xl">Comment planter des betteraves ?</h2>
+    <h2 class="font-bold text-xl bg-main text-white px-4 py-2 rounded-lg mt-8">Comment planter des betteraves ?</h2>
     <p class="w-1/2 mt-4">Semez les betteraves en mars - avril pour les betteraves de variétés demi-longues à longues, en avril - mai voire juin pour les variétés rondes ou plates au cycle végétatif plus court.
 
 L’espace pour les semis se fait dans des sillons peu profonds avec un espace de 20- 25 cm. Semez au clair quelques centimètres entre les graines. Refermez le sillon, plongez légèrement et arrosez.

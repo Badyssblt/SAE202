@@ -6,7 +6,7 @@ require('../conf/header.inc.php');
 
 
 <div class="px-10 flex flex-col items-center min-h-screen">
-    <h2 class="font-bold text-xl">Règlement au sein des potagers</h2>
+    <h2 class="font-bold text-xl bg-main text-white px-4 py-2 rounded-lg mt-8">Règlement au sein des potagers</h2>
     <p class="w-1/2 mt-4">Le potager partagé de Planta comprend:
 
 Des parcelles individuelles qui sont attribuées dans le respect de la procédure ci-dessus ;
