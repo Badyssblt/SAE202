@@ -21,7 +21,7 @@ $plantes = sql($sql);
 ?>
 
 <div class="my-12">
-    <h2 class="font-bold text-3xl text-center my-12">Statistiques du site web</h2>
+    <h2 class="font-bold text-3xl text-center my-12" style="font-family: Quicksand">Statistiques du site web</h2>
     <div class="flex flex-row gap-12 justify-center">
         <div class="flex flex-col">
             <h2 class="font-bold text-xl">Jardins</h2>

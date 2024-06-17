@@ -20,7 +20,7 @@ $users = findAll("users");
 
 ?>
 
-<form action="./edit.valid.php" enctype="multipart/form-data" method="POST" class="px-10" onsubmit="editPost(event)">
+<form action="./edit.valid.php" enctype="multipart/form-data" method="POST" class="px-10 py-14" onsubmit="editPost(event)">
         <?php
             if(isset($post['post_image'])){ ?>
             <div class="flex flex-col gap-2">
@@ -38,7 +38,9 @@ $users = findAll("users");
         <div id="editor">
             <?= $post['post_content'] ?>
         </div>
-        <select name="user_id" id="user_id">
+        <div class="flex flex-col mt-4">
+        <label for="user_id" class="font-bold">Entrer l'utilisateur</label>
+        <select name="user_id" id="user_id" class="border px-4 py-2">
             <?php foreach($users as $user): 
                 if($user['user_id'] == $post['user_id']){ ?>
                     <option value="<?= $user['user_id'] ?>" selected><?= $user['user_nom'] ?></option>
@@ -46,7 +48,11 @@ $users = findAll("users");
                 <option value="<?= $user['user_id'] ?>"><?= $user['user_nom'] ?></option>
             <?php endforeach; ?>
         </select>
-        <button type="submit">Modifier le post</button>
+        </div>
+        
+        <div class="bg-main text-white px-4 py-2 rounded-lg flex justify-center mt-4">
+            <button type="submit">Modifier le post</button>
+        </div>
 </form>
 
 

@@ -15,7 +15,7 @@ $jardins = sql($sql);
 ?>
 
 <div class="mt-10">
-    <h2 class="font-bold text-4xl mb-4 text-left ml-10" style="color: #3E582A;">Nos jardins</h2>
+    <h2 class="font-bold text-4xl mb-4 text-left ml-10" style="color: #3E582A; font-family: Quicksand">Nos jardins</h2>
     <div>
         <h3 class="font-bold text-xl p-10">Nos jardins les plus fréquentés</h3>
         <section id="image-carousel" class="splide w-full h-48 md:h-[400px] overflow-hidden" aria-label="Beautiful Images">
@@ -50,7 +50,7 @@ $jardins = sql($sql);
             <button onclick="sortBy('created')" class="bg-slate-200 px-4 py-2 rounded-full">Date de création</button>
         </div>
     </div>
-    <div class="flex flex-wrap gap-8" id="listing">
+    <div class="flex flex-wrap gap-8 justify-center" id="listing">
         <?php
         foreach ($jardins as $jardin) { ?>
             <div class="flex flex-col gap-4 w-96 border py-4 px-2 shadow-md">
@@ -143,12 +143,7 @@ $jardins = sql($sql);
 </script>
 
 
-<style>
-    .splide__slide img {
-        width: 100%;
-        height: 100%;
-    }
-</style>
+
 
 <?php
 

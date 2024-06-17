@@ -33,11 +33,6 @@ require('../conf/header.inc.php');
     </form>
 </div>
 
-
-<?php
-require('../conf/footer.inc.php');
-?>
-
 <script>
     document.getElementById('toggle-password').addEventListener('click', function() {
         const passwordField = document.getElementById('password');
@@ -46,3 +41,9 @@ require('../conf/footer.inc.php');
 
     });
 </script>
+
+
+<?php
+require('../conf/footer.inc.php');
+?>
+
