@@ -4,7 +4,7 @@ require('../../conf/header.inc.php');
 require("../../conf/function.inc.php");
 
 $posts = findAll("post");
-$commentary = findAll("commentary");
+$commentaries = findAll("commentary");
 
 
 
@@ -60,6 +60,8 @@ unset($_SESSION['success']['message']);
 }
 ?>
 
+<div class="flex flex-col px-10">
+<h2 class="font-bold text-xl">Posts publiés</h2>
 <div class="flex flex-col gap-4 md:flex-wrap md:flex-row">
     <?php foreach($posts as $post) : ?>
         <div class="flex flex-col px-10 ">
@@ -74,6 +76,30 @@ unset($_SESSION['success']['message']);
         </div>
 
     <?php endforeach; ?>
+</div>
+
+</div>
+
+
+<div class="flex flex-col px-10 mt-8">
+<h2 class="font-bold text-xl">Commentaires publiés</h2>
+<div class="flex flex-col gap-4 md:flex-wrap md:flex-row">
+    <?php 
+    if(count($commentaries) == 0){
+      echo "<p>Aucun commentaire...</p>";
+    }else {
+      foreach($commentaries as $commentary) : ?>
+        <div class="flex flex-col px-10 ">
+            <p><?= $commentary['commentary_content'] ?></p>
+            <div class="flex flex-row">
+                <a href="./process/deleteCom.proc.php?id=<?= $commentary['commentary_id'] ?>"  class="bg-red-800 text-white py-2 px-4 rounded-sm flex justify-center mt-4">Supprimer</a>
+            </div>
+        </div>
+    <?php endforeach; ?>
+   <?php } ?>
+    
+</div>
+
 </div>
 
 <script>

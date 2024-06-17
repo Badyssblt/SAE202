@@ -3,7 +3,7 @@ $title = "Planta";
 require('conf/header.inc.php');
 
 ?>
-<main class="md:h-96">
+<main class="md:min-h-screen">
     <div class="bg-no-repeat bg-cover md:h-full md:h-72">
         <div class="flex items-center justify-center h-full px-10 flex-col  md:flex-row">
             <div>
@@ -64,13 +64,13 @@ require('conf/header.inc.php');
     </div>
 </section>
 
-<section class="px-10 flex flex-col mt-12 md:flex-row">
-    <img class="w-96" src="/assets/images/jardin.png" alt="">
-    <div class="md:ml-24">
+<section class="px-10 flex flex-col mt-12">
+    <img class="w-full" src="/assets/images/jardin.png" alt="">
+    <div>
         <h4 class="text-2xl font-bold py-4 text-center md:text-left">Nos jardins</h4>
-        <p class="text-justify md:w-1/2">a FNJFC contribue au développement des jardins familiaux tout en veillant au maintien des acquis des jardiniers. La Fédération crée, réhabilite, aménage, développe, gère, anime et défend ses groupes de jardins adhérents développe, gère, anime et défend ses groupes de jardins adhérents..</p>
-        <div class="flex justify-start my-6">
-            <a href="#" class="bg-main px-2 py-2 rounded-lg font-bold flex justify-center w-28">Découvrir</a>
+        <p class="text-justify md:w-full">Planta contribue au développement des jardins familiaux tout en veillant au maintien des acquis des jardiniers. Aussi bien débutants que jardiniers aguerrit, grâce à Planta, vous pouvez faire différentes rencontres et créer de vrais liens d'amitié autour de votre passion commune.</p>
+        <div class="flex justify-center my-6 md:justify-end">
+            <a href="#" class="bg-main px-2 py-2 rounded-lg font-bold flex justify-center w-28 text-white">Découvrir</a>
         </div>
     </div>
 

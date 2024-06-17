@@ -18,7 +18,7 @@ $jardins = sql($sql);
     <h2 class="font-bold text-4xl mb-4 text-left ml-10" style="color: #3E582A;">Nos jardins</h2>
     <div>
         <h3 class="font-bold text-xl p-10">Nos jardins les plus fréquentés</h3>
-        <section id="image-carousel" class="splide w-full h-48 md:h-[500px] overflow-hidden" aria-label="Beautiful Images">
+        <section id="image-carousel" class="splide w-full h-48 md:h-[400px] overflow-hidden" aria-label="Beautiful Images">
             <div class="splide__track">
                 <ul class="splide__list">
                     <?php

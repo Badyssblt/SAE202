@@ -1,5 +1,5 @@
 <?php
-
+$title = "Recherche";
 require("../conf/header.inc.php");
 require("../conf/function.inc.php");
 
@@ -15,8 +15,8 @@ $jardins = $query->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-
-<div class="flex flex-wrap gap-8" id="listing">
+<div class="min-h-screen">
+<div class="flex flex-wrap gap-8 px-10" id="listing">
         <?php
         if(count($jardins) <= 0){ ?>
             <p>Aucun résultat</p>
@@ -24,7 +24,7 @@ $jardins = $query->fetchAll(PDO::FETCH_ASSOC);
         }
 
         foreach ($jardins as $jardin) { ?>
-            <div class="flex flex-col gap-4 w-96">
+            <div class="flex flex-col gap-4 w-96 border py-4 px-2 shadow-md">
                 <div class="w-full h-64 rounded-xl overflow-hidden">
                     <img src="../assets/images/uploads/garden/<?= $jardin['jardin_image'] ?>" alt="" class="w-full h-full object-cover">
                 </div>
@@ -33,9 +33,10 @@ $jardins = $query->fetchAll(PDO::FETCH_ASSOC);
                 <p class="font-bold text-center ">Nombre de parcelle: <span class="font-bold"><?= $jardin['parcelle_count'] ?></span></p>
 
                 <div>
-                    <a href="./single.php?id=<?= $jardin['jardin_id'] ?>" class="bg-black text-white py-2 px-4 mx-4 rounded-sm flex justify-center mt-2">Voir plus</a>
+                    <a href="../garden/single.php?id=<?= $jardin['jardin_id'] ?>" class="bg-main font-bold text-lg text-white py-2 px-4 mx-4 rounded-sm flex justify-center mt-2">Voir plus</a>
                 </div>
             </div>
+
 
         <?php
         }
@@ -43,4 +44,9 @@ $jardins = $query->fetchAll(PDO::FETCH_ASSOC);
         ?>
 
     </div>
+</div>
 
+
+<?php
+require('../conf/footer.inc.php');
+?>

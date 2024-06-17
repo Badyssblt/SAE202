@@ -3,9 +3,9 @@
     <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-8 md:justify-center">
         <h4 class="text-xl font-bold text-center">Suivez nous !</h4>
         <div class="flex flex-row gap-6 justify-center my-6">
-            <a href="#"><img src="/assets/images/twitter.png" alt=""></a>
-            <a href="#"><img src="/assets/images/facebook.png" alt=""></a>
-            <a href="#"><img src="/assets/images/instagram.png" alt=""></a>
+            <a href="#"><img src="/assets/images/twitter.svg" alt=""></a>
+            <a href="#"><img src="/assets/images/facebook.svg" alt=""></a>
+            <a href="#"><img src="/assets/images/instagram.svg" alt=""></a>
         </div>
     </div>
 

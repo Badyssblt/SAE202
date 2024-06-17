@@ -296,16 +296,16 @@ require('../../conf/footer.inc.php');
         wrapper.empty();
         data.forEach(element => {
             const jardinData = JSON.stringify(element);
-            const div = `<div class="border rounded-sm flex flex-col gap-4 w-96">
+            const div = `<div class="flex flex-col gap-4 w-96 border py-4 px-2 shadow-md">
                 <img src="../../assets/images/uploads/garden/${element['jardin_image']}" alt="" class="w-full">
-                <h3>${element['jardin_nom']}</h3>
-                <p>Nombre de parcelle: <span class="font-bold">${element['parcelle_count']}</span></p>
-                <h4>Propriétaire: <span class="font-bold">${element['user_nom']}</span></h4>
-                <div class="flex flex-row gap-4">
+                <h3 class="font-bold text-center text-xl underline">${element['jardin_nom']}</h3>
+                <h4 class="font-bold text-center flex items-center justify-center"><img class="w-8 mr-4" src="../../assets/images/uploads/users/user.png" alt="">Propriétaire: <span class="font-bold">${element['user_nom']}</span></h4>
+                <p class="font-bold text-center ">Nombre de parcelle: <span class="font-bold">${element['parcelle_count']}</span></p>
+                <div class="flex flex-row gap-4 px-4">
                 <button class="border text-black py-2 px-4 rounded-sm flex justify-center mt-4" onclick='displayEditGardenForm(${jardinData})'>Modifier</button>
                     <button onclick="deleteGarden(${element['jardin_id']})" class="bg-red-800 text-white py-2 px-4 rounded-sm flex justify-center mt-4">Supprimer</button>
                 </div>
-                <a href="/garden/single.php?id=${element['jardin_id']}" class="bg-black text-white py-2 px-4 rounded-sm flex justify-center mt-2">Voir plus</a>
+                <a href="/garden/single.php?id=${element['jardin_id']}" class="bg-main font-bold text-lg text-white py-2 px-4 mx-4 rounded-sm flex justify-center mt-2">Voir plus</a>
             </div>`;
             wrapper.append(div);
         });

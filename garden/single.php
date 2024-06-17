@@ -1,7 +1,7 @@
 <?php
 // BACKEND
 ob_start();
-require('../conf/header.inc.php');
+
 require('../conf/function.inc.php');
 
 if(isset($_SESSION['id'])){
@@ -31,7 +31,8 @@ $query_jardin->bindParam(':id', $_GET['id']);
 $query_jardin->execute();
 $jardin = $query_jardin->fetch(PDO::FETCH_ASSOC);
 
-
+$title = $jardin['jardin_nom'];
+require('../conf/header.inc.php');
 if(!$jardin){
     header('Location: /');
     exit();
@@ -106,6 +107,9 @@ if ($jardin) {
             <h3 class="font-bold text-xl">Parcelles :</h3>
             <div class="grid grid-cols-3 gap-4 mt-4" id="listing">
                 <?php
+                if(count($parcelles) == 0){
+                    echo "<p>Aucune parcelle de disponible</p>";
+                } else {
                     foreach($parcelles as $parcelle){ 
                         $isAvailable = $parcelle['isAccepted'] == 1 ? false : true;  
                         $isWaiting = ($isAvailable && $parcelle['parcelle_user'] != null) ? true : false;
@@ -154,6 +158,8 @@ if ($jardin) {
                         </div>
                     <?php
                     }
+                }
+                    
                 ?>
             </div>
         </div>
@@ -264,6 +270,13 @@ require('../conf/footer.inc.php');
     {
         const wrapper = $("#listing");
         wrapper.empty();
+
+        if(data.length == 0){
+            const div = `<p>Aucune parcelle de disponible</p>`;
+            wrapper.append(div);
+            return;
+        }
+
         data.forEach(element => {
         let isAvailable = element.isAccepted == 1 ? false : true;
         let isWaiting = (isAvailable && element.parcelle_user != null) ? true : false;
