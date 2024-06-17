@@ -1,6 +1,6 @@
 <?php
 $activePage = "plantes";
-$title = "Nos plantes";
+$title = "Planta | La liste des plantes disponibles";
 require('../conf/header.inc.php');
 require("../conf/function.inc.php");
 

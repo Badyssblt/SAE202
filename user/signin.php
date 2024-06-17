@@ -1,5 +1,5 @@
 <?php
-$title = "Se connecter";
+$title = "Planta | Connectez vous !";
 require('../conf/header.inc.php');
 
 ?>

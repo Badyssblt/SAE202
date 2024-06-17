@@ -1,5 +1,5 @@
 <?php
-$title = "S'inscrire";
+$title = "Planta | Inscrivez vous sur Planta ! ";
 require('../conf/header.inc.php');
 ?>
 <div class="flex items-center justify-center">

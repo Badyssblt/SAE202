@@ -1,6 +1,6 @@
 <?php
 $activePage = "admin";
-$title = "Administrateur";
+$title = "Planta | Gestion des demandes";
 require('../conf/header.inc.php');
 require('../conf/function.inc.php');
 

@@ -1,6 +1,6 @@
 <?php
 $activePage = 'contact';
-$title = "Contact";
+$title = "Planta | N’hésitez pas à nous contacter";
 require("../conf/header.inc.php");
 
 ?>

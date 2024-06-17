@@ -1,6 +1,6 @@
 <?php
 $activePage = "social";
-$title = "Réseau social";
+$title = "Planta | Partagez vos impressions sur Planta.net";
 require('../conf/header.inc.php');
 
 ?>

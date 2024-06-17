@@ -4,7 +4,7 @@
 
 <header class="px-10 mb-4">
     <div class="flex flex-row justify-between mt-8">
-        <h1><a href="/"><img src="/assets/images/icon.png" alt=""></a></h1>
+        <h1><a href="/"><img src="/assets/images/icon.svg" alt=""></a></h1>
         <div class="flex items-center flex-col md:hidden">
             <?php
                 if(isset($_SESSION['id'])){ ?>
@@ -66,23 +66,37 @@
 
     <menu id="menu" class="mt-6 mb-4 hidden md:flex flex-col md:flex-row items-center justify-center gap-20">
             <div class="flex flex-col md:flex-row gap-10">
-            <li class="flex flex-row gap-2">
-                <a href="/garden" class="<?php echo ($activePage === 'garden') ? 'underline' : ''; ?> whitespace-nowrap">Nos jardins</a>
-            </li>
+            <a href="/garden" class="<?php echo ($activePage === 'garden') ? 'underline underline-offset-4' : ''; ?> whitespace-nowrap relative group">
+    Nos jardins
+    <span class="absolute left-0 bottom-0 w-full h-0.5 bg-current transform scale-x-0 transition-transform duration-300 ease-in-out origin-left group-hover:scale-x-100"></span>
+</a>
             
-            <li class="flex flex-row gap-2">
-                <a href="/plantes/index.php" class="<?php echo ($activePage === 'plantes') ? 'underline' : ''; ?> whitespace-nowrap">Nos plantes</a>
-            </li>
-            <li class="flex flex-row gap-2"><a class="<?php echo ($activePage === 'social') ? 'underline' : ''; ?> whitespace-nowrap" href="/social/index.php">Réseau social</a>
-            </li>
+    <li class="flex flex-row gap-2">
+        <a href="/plantes/index.php" class="<?php echo ($activePage === 'plantes') ? 'underline underline-offset-4' : ''; ?> whitespace-nowrap relative group">
+            Nos plantes
+            <span class="absolute left-0 bottom-0 w-full h-0.5 bg-current transform scale-x-0 transition-transform duration-300 ease-in-out origin-left group-hover:scale-x-100"></span>
+        </a>  
+    </li>
 
-            <li class="flex flex-row gap-2">
-                <a href="/contact/index.php" class="<?php echo ($activePage === 'contact') ? 'underline' : ''; ?> whitespace-nowrap">Contact</a>
-            </li>
-            <li class="flex flex-row gap-2">
-                <a href="/gestion" class="<?php echo ($activePage === 'admin') ? 'underline' : ''; ?> whitespace-nowrap">Administrateur</a>
-            </li>
+    <li class="flex flex-row gap-2">
+        <a href="/social/index.php" class="<?php echo ($activePage === 'social') ? 'underline underline-offset-4' : ''; ?> whitespace-nowrap relative group">
+            Réseau social
+            <span class="absolute left-0 bottom-0 w-full h-0.5 bg-current transform scale-x-0 transition-transform duration-300 ease-in-out origin-left group-hover:scale-x-100"></span>
+        </a>
+    </li>
 
+    <li class="flex flex-row gap-2">
+    <a href="/contact/index.php" class="<?php echo ($activePage === 'contact') ? 'underline underline-offset-4' : ''; ?> whitespace-nowrap relative group">
+        Contact
+        <span class="absolute left-0 bottom-0 w-full h-0.5 bg-current transform scale-x-0 transition-transform duration-300 ease-in-out origin-left group-hover:scale-x-100"></span>
+    </a>
+</li>
+<li class="flex flex-row gap-2">
+    <a href="/gestion" class="<?php echo ($activePage === 'admin') ? 'underline underline-offset-4' : ''; ?> whitespace-nowrap relative group">
+        Administrateur
+        <span class="absolute left-0 bottom-0 w-full h-0.5 bg-current transform scale-x-0 transition-transform duration-300 ease-in-out origin-left group-hover:scale-x-100"></span>
+    </a>
+</li>
 
         </div>
 

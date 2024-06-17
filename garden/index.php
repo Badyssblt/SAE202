@@ -1,5 +1,5 @@
 <?php
-$title = "Nos jardins";
+$title = "Planta | Découvrez nos jardins pour vos futures récoltes";
 $activePage = "garden";
 require('../conf/header.inc.php');
 require('../conf/function.inc.php');
